@@ -3,8 +3,9 @@ const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const authorized = require("../middleware/authorization");
+const { RegisterValidator } = require("../middleware/validators");
 
-router.post("/register", async(req, res) => {
+router.post("/register", RegisterValidator, async(req, res) => {
     try {
         const { username, email, password } = req.body;
 
@@ -26,11 +27,10 @@ router.post("/register", async(req, res) => {
         
         const token = jwtGenerator(newUser.rows[0].id);
 
-        res.status(201).json({ success: true, token: token });
-        
+        return res.status(201).json({ success: true, token: token });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ success: false, message: "Server Error" });
+        return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
 
@@ -51,19 +51,19 @@ router.post("/login", async(req, res) => {
 
         const token = jwtGenerator(user.rows[0].id);
 
-        res.status(200).json({ success: true, token: token });
+        return res.status(200).json({ success: true, token: token });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ success: false, message: "Server Error" });
+        return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
 
 router.post("/verify", authorized, async(req, res) => {
     try {
-        res.status(200).json({ success: true, authorized: true });
+        return res.status(200).json({ success: true, authorized: true });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ success: false, message: "Server Error" });
+        return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
 
