@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/users", require("./routes/user"));
+app.use("/api/contests", require("./routes/contest"));
 
 app.listen(PORT, () => {
     console.log(`Port has started on port ${PORT}`);
