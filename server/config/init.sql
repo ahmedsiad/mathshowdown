@@ -22,7 +22,8 @@ CREATE TABLE problems (
     title VARCHAR(64),
     problem_index VARCHAR(1),
     problem_text VARCHAR,
-    answer VARCHAR(32)
+    answer VARCHAR(32),
+    contest_id int REFERENCES contests(id)
 );
 
 CREATE TABLE tags (
