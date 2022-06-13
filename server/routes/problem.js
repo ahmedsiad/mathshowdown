@@ -10,6 +10,6 @@ router.get("/", async(req, res) => {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
     }
-})
+});
 
 module.exports = router;
