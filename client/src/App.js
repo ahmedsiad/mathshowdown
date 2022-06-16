@@ -7,6 +7,7 @@ import Divider from "@mui/material/Divider";
 import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Contest from "./pages/Contest";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -54,6 +55,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/contest/:id" element={<Contest />} />
         </Routes>
       </BrowserRouter>
     </div>
