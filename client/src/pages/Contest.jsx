@@ -5,15 +5,15 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import ContestTable from "../components/ContestTable";
 
 const Contest = (props) => {
     const params = useParams();
 
     const [loading, setLoading] = useState(true);
     const [contest, setContest] = useState({});
+    const [problems, setProblems] = useState([]);
 
     useEffect(() => {
         const contest_id = params.id;
@@ -25,6 +25,8 @@ const Contest = (props) => {
         }).then(([res1, res2]) => {
             if (res1.success && res2.success) {
                 console.log(res1, res2);
+                setContest(res1.contest);
+                setProblems(res2.problems);
                 setLoading(false);
             } else {
                 window.location = "/";
@@ -40,8 +42,35 @@ const Contest = (props) => {
                 </Box>
             }
             {!loading &&
-                <Grid>
-
+                <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
+                    <Grid item xs={2} />
+                    <Grid item xs={6}>
+                        <Paper square sx={{ padding: "12px" }} elevation={3}>
+                            <Grid container spacing={1} sx={{ width: "100%", margin: 0 }}>
+                                <Grid item xs={12} sx={{ textAlign: "center" }}>
+                                    <Typography variant="h5">Problems</Typography>
+                                </Grid>
+                                <Divider sx={{ width: "100%" }} />
+                                <Grid item xs={12}>
+                                    <ContestTable problems={problems} path={window.location.pathname} />
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Paper square sx={{ padding: "12px" }} elevation={3}>
+                            <Grid container spacing={1} sx={{ width: "100%", margin: 0, textAlign: "center" }}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>{contest.title}</Typography>
+                                </Grid>
+                                <Divider sx={{ width: "100%" }} />
+                                <Grid item xs={12}>
+                                    <Typography variant="body1" sx={{ fontWeight: "lighter" }}>Time Remaining:</Typography>
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={1} />
                 </Grid>
             }
         </div>
