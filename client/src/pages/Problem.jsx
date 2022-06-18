@@ -12,7 +12,6 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Countdown from "../components/Countdown";
 
-
 const Problem = (props) => {
     const params = useParams();
 
