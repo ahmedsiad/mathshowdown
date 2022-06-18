@@ -62,4 +62,16 @@ router.get("/:id/users", async(req, res) => {
         return res.status(500).json({ success: false, message: "Server Error" });
     }
 });
+
+router.get("/", async(req, res) => {
+    try {
+        const contest_query = await pool.query("SELECT * FROM contests");
+
+        return res.status(200).json({ success: true, contests: contest_query.rows });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
 module.exports = router;

@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Contest from "./pages/Contest";
+import ContestList from "./pages/ContestList";
 import Problem from "./pages/Problem";
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/contests" element={<ContestList />} />
           <Route path="/contest/:id" element={<Contest />} />
           <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
         </Routes>
