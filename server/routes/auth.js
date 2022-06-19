@@ -37,7 +37,6 @@ router.post("/register", RegisterValidator, async(req, res) => {
 router.post("/login", async(req, res) => {
     try {
         const { username, email, password } = req.body;
-        console.log(username, email, password);
 
         const user = await pool.query("SELECT * FROM users WHERE LOWER(username) = LOWER($1) OR LOWER(email) = LOWER($2)", [username, email]);
         if (user.rows.length === 0) {
@@ -60,7 +59,11 @@ router.post("/login", async(req, res) => {
 
 router.post("/verify", authorized, async(req, res) => {
     try {
-        return res.status(200).json({ success: true, authorized: true });
+        const user_id = req.user;
+
+        const user_query = await pool.query("SELECT is_admin FROM users WHERE id = $1", [user_id]);
+
+        return res.status(200).json({ success: true, authorized: true, is_admin: user_query.rows[0].is_admin });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });

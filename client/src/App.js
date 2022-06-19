@@ -10,22 +10,26 @@ import Register from "./pages/Register";
 import Contest from "./pages/Contest";
 import ContestList from "./pages/ContestList";
 import Problem from "./pages/Problem";
+import Create from "./pages/Create";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const checkAuthentication = () => {
     fetch("/api/auth/verify", {
       method: "POST",
       headers: { "Authorization": "Bearer " + sessionStorage.getItem("auth_token") }
     }).then((response) => {
-      console.log(response);
-      if (response.status === 200) {
+      return response.json();
+    }).then((res) => {
+      if (res.success) {
         setAuthenticated(true);
+        setAuthenticated(res.is_admin);
       } else {
         setAuthenticated(false);
       }
-    });
+    })
   }
 
   useEffect(() => {
@@ -60,6 +64,7 @@ function App() {
           <Route path="/contests" element={<ContestList />} />
           <Route path="/contest/:id" element={<Contest />} />
           <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
+          <Route path="/create/" element={<Create />} />
         </Routes>
       </BrowserRouter>
     </div>

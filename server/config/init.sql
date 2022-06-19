@@ -6,7 +6,8 @@ CREATE TABLE users (
     email VARCHAR(128),
     password_hash VARCHAR(256),
     rating int,
-    registration_date bigint
+    registration_date bigint,
+    is_admin boolean NOT NULL default False
 );
 
 CREATE TABLE contests (
@@ -54,4 +55,10 @@ CREATE TABLE submissions (
     answer VARCHAR(32),
     submission_time bigint,
     verdict boolean
+);
+
+CREATE TABLE authors (
+    user_id int REFERENCES users(id),
+    contest_id int REFERENCES contests(id),
+    PRIMARY KEY (user_id, contest_id)
 );
