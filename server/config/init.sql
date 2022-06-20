@@ -24,6 +24,7 @@ CREATE TABLE problems (
     problem_index VARCHAR(1),
     problem_text VARCHAR,
     answer VARCHAR(32),
+    image_url VARCHAR(64),
     contest_id int REFERENCES contests(id)
 );
 

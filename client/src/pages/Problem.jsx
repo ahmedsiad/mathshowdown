@@ -23,7 +23,6 @@ const Problem = (props) => {
     const [errors, setErrors] = useState({ answer: false });
     const [helpers, setHelpers] = useState({ answer: "" });
 
-    const k = "\\(4^{127} + 5^{129} + 7^{231}\\)";
 
     useEffect(() => {
         const { contest_id, problem_index } = params;
@@ -79,7 +78,7 @@ const Problem = (props) => {
                                 </Grid>
                                 <Divider sx={{ width: "100%", marginTop: "10px" }} />
                                 <Grid item xs={12} sx={{ marginTop: "10px" }}>
-                                    <Typography>What is the integer formed by the rightmost two digits of the integer equal to {k}?</Typography>
+                                    <Typography>{problem.problem_text}</Typography>
                                 </Grid>
                                 <Grid item xs={12} sx={{ marginTop: "30px", textAlign: "center" }}>
                                     <TextField
@@ -111,7 +110,7 @@ const Problem = (props) => {
                                 <Divider sx={{ width: "100%" }} />
                                 <Grid item xs={12}>
                                     <Typography variant="body1" sx={{ fontWeight: "lighter" }}>Time Remaining:</Typography>
-                                    <Countdown timestamp={1655529705753} />
+                                    <Countdown timestamp={contest.end_time} />
                                 </Grid>
                             </Grid>
                         </Paper>

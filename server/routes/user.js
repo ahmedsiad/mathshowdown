@@ -50,7 +50,18 @@ router.get("/:username", async(req, res) => {
             return res.status(404).json({ success: false, message: "User does not exist" });
         }
         
-        return res.status(200).json({ success: true, user: user_query.rows });
+        return res.status(200).json({ success: true, user: user_query.rows[0] });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
+router.get("/", async(req, res) => {
+    try {
+        const users_query = await pool.query("SELECT id, username, rating, registration_date FROM users");
+        
+        return res.status(200).json({ success: true, users: users_query.rows});
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });

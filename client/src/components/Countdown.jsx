@@ -15,7 +15,7 @@ const Countdown = (props) => {
 
     const updateCountdown = () => {
         const seconds = (props.timestamp - Date.now()) / 1000;
-        console.log(seconds);
+
         if (seconds < 0) {
             setTimeLeft("00:00:00");
             return;
