@@ -53,7 +53,7 @@ const Create = (props) => {
             if (res1.success && res2.success) {
                 setUsers(res1.users);
 
-                res2.tags.sort((a, b) => a.tag.localeCompare(b.tag));;
+                res2.tags.sort((a, b) => a.tag.localeCompare(b.tag));
                 setTags(res2.tags);
             }
         });
@@ -285,7 +285,7 @@ const Create = (props) => {
                                                 renderValue={(selected) => (
                                                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                                                         {selected.map((id) => (
-                                                            <Chip key={id} label={tags[id].tag} size="small" />
+                                                            <Chip key={id} label={tags.find((tg) => tg.id === id).tag} size="small" />
                                                         ))}
                                                     </Box>
                                                 )}

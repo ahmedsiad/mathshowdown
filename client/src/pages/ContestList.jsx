@@ -7,7 +7,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 const ContestList = (props) => {
     const [loading, setLoading] = useState(true);
-    const [contests, setContests] = useState([]);
+    const [pastContests, setPastContests] = useState([]);
+    const [currentContests, setCurrentContests] = useState([]);
+    const [futureContests, setFutureContests] = useState([]);
 
     useEffect(() => {
         fetch("/api/contests", {
@@ -17,7 +19,25 @@ const ContestList = (props) => {
         }).then((res) => {
             if (res.success) {
                 console.log(res);
-                setContests(res.contests);
+
+                const pContests = [];
+                const cContests = [];
+                const fContests = [];
+
+                const now = Date.now();
+                for (const contest of res.contests) {
+                    if (contest.end_time <= now) {
+                        pContests.push(contest);
+                    } else if (contest.start_time <= now) {
+                        cContests.push(contest);
+                    } else {
+                        fContests.push(contest);
+                    }
+                }
+                setPastContests([...pContests]);
+                setCurrentContests([...cContests]);
+                setFutureContests([...fContests]);
+
                 setLoading(false);
             }
         })
