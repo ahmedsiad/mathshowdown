@@ -22,8 +22,20 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Snackbar from "@mui/material/Snackbar";
 
+// make selects scrollable
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP
+        },
+    },
+};
+
 const Create = (props) => {
     const [users, setUsers] = useState([]);
+    const [tags, setTags] = useState([]);
 
     const [contestInputs, setContestInputs] = useState({ title: "", division: 1, authors: [] });
     const [startTime, setStartTime] = useState(new Date());
@@ -32,13 +44,17 @@ const Create = (props) => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetch("/api/users", {
-            method: "GET"
-        }).then((response) => {
-            return response.json();
-        }).then((res) => {
-            if (res.success) {
-                setUsers(res.users);
+        Promise.all([
+            fetch("/api/users", { method: "GET" }),
+            fetch("/api/tags", { method: "GET" })
+        ]).then(([res1, res2]) => {
+            return Promise.all([res1.json(), res2.json()]);
+        }).then(([res1, res2]) => {
+            if (res1.success && res2.success) {
+                setUsers(res1.users);
+
+                res2.tags.sort((a, b) => a.tag.localeCompare(b.tag));;
+                setTags(res2.tags);
             }
         });
     }, []);
@@ -65,7 +81,7 @@ const Create = (props) => {
 
     const addProblem = (event) => {
         if (problems.length >= 26) return;
-        setProblems([...problems, { title: "", description: "", image: "", answer: "" }]);
+        setProblems([...problems, { title: "", description: "", image: "", answer: "", tags: [] }]);
     }
 
     const deleteProblem = (event, index) => {
@@ -98,7 +114,7 @@ const Create = (props) => {
         }
 
         const data = { ...contestInputs, authors: author_ids, startTime: startTime.getTime(), endTime: endTime.getTime(), problems };
-        console.log(data);
+
         fetch("/api/contests", {
             method: "POST",
             headers: { "Content-type": "application/json", "Authorization": "Bearer " + sessionStorage.getItem("auth_token") },
@@ -106,7 +122,11 @@ const Create = (props) => {
         }).then((response) => {
             return response.json();
         }).then((res) => {
-            console.log(res);
+            if (res.success) {
+
+            } else {
+                setError(true);
+            }
         })
     }
 
@@ -120,7 +140,7 @@ const Create = (props) => {
                             <Grid item xs={12} sx={{ textAlign: "center" }}>
                                 <Typography variant="h4">Contest Creator</Typography>
                             </Grid>
-                            <Divider sx={{ width: "100%" }} />
+                            <Divider sx={{ width: "100%", marginTop: "15px" }} />
 
                             <Grid item xs={2}>
                                 <Typography variant="h6">Contest Title:</Typography>
@@ -143,7 +163,7 @@ const Create = (props) => {
                                 <Grid item xs={10}>
                                     <DateTimePicker
                                         value={startTime}
-                                        minDate={new Date()}
+                                        minDateTime={new Date()}
                                         onChange={handleStartTime}
                                         renderInput={(params) => <TextField {...params} size="small" />} />
                                 </Grid>
@@ -185,6 +205,7 @@ const Create = (props) => {
                                         value={contestInputs.authors}
                                         onChange={handleContestInputs}
                                         input={<OutlinedInput label="Authors" />}
+                                        MenuProps={MenuProps}
                                         renderValue={(selected) => (
                                             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                                                 {selected.map((author) => (
@@ -249,6 +270,38 @@ const Create = (props) => {
                                     </Grid>
 
                                     <Grid item xs={2}>
+                                        <Typography variant="h6">Tags:</Typography>
+                                    </Grid>
+                                    <Grid item xs={5}>
+                                        <FormControl variant="outlined" size="small" sx={{ width: "100%" }}>
+                                            <InputLabel>Tags</InputLabel>
+                                            <Select
+                                                multiple
+                                                name="tags"
+                                                value={problem.tags}
+                                                onChange={(event) => handleProblem(event, index)}
+                                                input={<OutlinedInput label="Tags" />}
+                                                MenuProps={MenuProps}
+                                                renderValue={(selected) => (
+                                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                                        {selected.map((id) => (
+                                                            <Chip key={id} label={tags[id].tag} size="small" />
+                                                        ))}
+                                                    </Box>
+                                                )}
+                                            >
+                                                {tags.map((tag) => (
+                                                    <MenuItem key={tag.tag} value={tag.id}>
+                                                        <Checkbox checked={problem.tags.indexOf(tag.id) > -1} />
+                                                        <ListItemText primary={tag.tag} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={5} />
+
+                                    <Grid item xs={2}>
                                         <Typography variant="h6">Image URL:</Typography>
                                     </Grid>
                                     <Grid item xs={4}>
@@ -293,7 +346,7 @@ const Create = (props) => {
                     </Paper>
                 </Grid>
             </Grid>
-            <Snackbar open={error} autoHideDuration={5000} onClose={closeError} message={"Invalid submission"}></Snackbar>
+            <Snackbar open={error} autoHideDuration={5000} onClose={closeError} message={"Invalid Submission"}></Snackbar>
         </div>
     );
 }

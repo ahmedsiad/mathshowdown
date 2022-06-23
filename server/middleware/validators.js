@@ -65,5 +65,6 @@ const ContestValidator = async(req, res, next) => {
 }
 
 module.exports = {
-    RegisterValidator
+    RegisterValidator,
+    ContestValidator
 };

@@ -17,6 +17,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/users", require("./routes/user"));
 app.use("/api/contests", require("./routes/contest"));
 app.use("/api/problems", require("./routes/problem"));
+app.use("/api/tags", require("./routes/tags"));
 
 app.listen(PORT, () => {
     console.log(`Port has started on port ${PORT}`);
