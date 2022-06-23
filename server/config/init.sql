@@ -5,7 +5,7 @@ CREATE TABLE users (
     username VARCHAR(32),
     email VARCHAR(128),
     password_hash VARCHAR(256),
-    rating int,
+    rating int NOT NULL default 1500,
     registration_date bigint,
     is_admin boolean NOT NULL default False
 );

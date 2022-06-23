@@ -68,6 +68,13 @@ router.get("/:id/users", async(req, res) => {
 router.get("/", async(req, res) => {
     try {
         const contest_query = await pool.query("SELECT * FROM contests");
+        const contests = contest_query.rows;
+
+        for (const contest of contests) {
+            const authors_query = await pool.query("SELECT username, rating FROM authors a INNER JOIN users ON a.user_id = users.id AND a.contest_id = $1",
+            [contest.id]);
+            contest.authors = [...authors_query.rows];
+        }
 
         return res.status(200).json({ success: true, contests: contest_query.rows });
     } catch (err) {

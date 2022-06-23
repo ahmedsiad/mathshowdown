@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
+import format from "date-fns/format";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 import CircularProgress from "@mui/material/CircularProgress";
+import Username from "../components/Username";
 
 const ContestList = (props) => {
     const [loading, setLoading] = useState(true);
@@ -55,7 +63,52 @@ const ContestList = (props) => {
                     <Grid item xs={2} />
                     <Grid item xs={8}>
                         <Paper square sx={{ padding: "12px" }} elevation={3}>
+                            <Grid container spacing={1} sx={{ width: "100%", margin: 0 }}>
+                                <Grid item xs={12} sx={{ textAlign: "center" }}>
+                                    <Typography variant="h4">Upcoming Contests</Typography>
+                                </Grid>
+                                <Divider sx={{ width: "100%" }} />
 
+                                <Grid item xs={12}>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Title</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Authors</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Start</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Duration</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {futureContests.map((contest, index) => (
+                                                <TableRow key={index}
+                                                    hover
+                                                    sx={index % 2 ? { background: "white" } : { background: "#f7f7f7" }}>
+                                                    <TableCell component="th" scope="row" align="center" sx={{ width: "30%" }}>
+                                                        <Typography>{contest.title}</Typography>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: "20%" }}>
+                                                        <Username></Username>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: "20%" }}>
+                                                        <Typography>{format(contest.start_time, "MMM/dd/yyyy")}</Typography>
+                                                        <Typography>{format(contest.start_time, "hh:mm OOOO")}</Typography>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: "10%" }}>
+                                                        <Typography>
+                                                            {new Date(contest.end_time - contest.start_time).toISOString().substring(11, 19)}
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </Grid>
+                            </Grid>
                         </Paper>
                     </Grid>
                 </Grid>
