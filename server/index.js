@@ -22,3 +22,9 @@ app.use("/api/tags", require("./routes/tags"));
 app.listen(PORT, () => {
     console.log(`Port has started on port ${PORT}`);
 });
+
+
+// set pg type
+
+const types = require("pg").types;
+types.setTypeParser(20, (val) => parseInt(val, 10));
