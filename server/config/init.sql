@@ -63,3 +63,14 @@ CREATE TABLE authors (
     contest_id int REFERENCES contests(id),
     PRIMARY KEY (user_id, contest_id)
 );
+
+INSERT INTO tags (tag) VALUES ('Geometry');
+INSERT INTO tags (tag) VALUES ('Algebra');
+INSERT INTO tags (tag) VALUES ('Trigonometry');
+INSERT INTO tags (tag) VALUES ('Calculus');
+INSERT INTO tags (tag) VALUES ('Linear Algebra');
+INSERT INTO tags (tag) VALUES ('Number Theory');
+INSERT INTO tags (tag) VALUES ('Probability');
+INSERT INTO tags (tag) VALUES ('Combinatorics');
+INSERT INTO tags (tag) VALUES ('Graph Theory');
+INSERT INTO tags (tag) VALUES ('Complex Numbers');
