@@ -1,6 +1,6 @@
 /* global MathJax */
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -9,7 +9,6 @@ import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Countdown from "../components/Countdown";
 
 const Problem = (props) => {
@@ -102,10 +101,11 @@ const Problem = (props) => {
                         <Paper square sx={{ padding: "12px" }} elevation={3}>
                             <Grid container spacing={1} sx={{ width: "100%", margin: 0, textAlign: "center" }}>
                                 <Grid item xs={12}>
-                                    <Link
-                                        href={`/contest/${contest.id}`}
-                                        variant="h6"
-                                        sx={{ textDecoration: "none" }}>{contest.title} (Div. {contest.division})</Link>
+                                    <Link to={`/contest/${contest.id}`} style={{ textDecoration: "none" }}>
+                                        <Typography variant="h6">
+                                            {contest.title} (Div. {contest.division})
+                                        </Typography>
+                                    </Link>
                                 </Grid>
                                 <Divider sx={{ width: "100%" }} />
                                 <Grid item xs={12}>

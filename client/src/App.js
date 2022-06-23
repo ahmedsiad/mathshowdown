@@ -33,6 +33,7 @@ function App() {
   }
 
   useEffect(() => {
+    console.log("hi");
     const potential_token = localStorage.getItem("auth_token");
     if (!!potential_token) {
       sessionStorage.setItem("auth_token", potential_token);

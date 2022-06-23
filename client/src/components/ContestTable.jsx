@@ -3,7 +3,8 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 
 const ContestTable = (props) => {
     return (
@@ -23,10 +24,14 @@ const ContestTable = (props) => {
                             hover
                             sx={index % 2 ? { background: "white" } : { background: "#f7f7f7" }}>
                             <TableCell component="th" scope="row" align="center" sx={{ width: "10%" }}>
-                                <Link href={`${props.path}/problem/` + problem.problem_index} sx={{ textDecoration: "none" }}>{problem.problem_index}</Link>
+                                <Link to={`${props.path}/problem/` + problem.problem_index} style={{ textDecoration: "none" }}>
+                                    <Typography variant="body1">{problem.problem_index}</Typography>
+                                </Link>
                             </TableCell>
                             <TableCell>
-                                <Link href={`${props.path}/problem/` + problem.problem_index} sx={{ textDecoration: "none" }}>{problem.title}</Link>
+                                <Link to={`${props.path}/problem/` + problem.problem_index} style={{ textDecoration: "none" }}>
+                                    <Typography variant="body1">{problem.title}</Typography>
+                                </Link>
                             </TableCell>
                             <TableCell></TableCell>
                         </TableRow>
