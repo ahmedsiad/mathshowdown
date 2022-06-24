@@ -67,7 +67,7 @@ const ContestList = (props) => {
                                 <Grid item xs={12} sx={{ textAlign: "center" }}>
                                     <Typography variant="h4">Upcoming Contests</Typography>
                                 </Grid>
-                                <Divider sx={{ width: "100%" }} />
+                                <Divider sx={{ width: "100%", marginTop: "20px" }} />
 
                                 <Grid item xs={12}>
                                     <Table>
@@ -77,7 +77,7 @@ const ContestList = (props) => {
                                                 <TableCell align="center" sx={{ fontWeight: "bold" }}>Authors</TableCell>
                                                 <TableCell align="center" sx={{ fontWeight: "bold" }}>Start</TableCell>
                                                 <TableCell align="center" sx={{ fontWeight: "bold" }}>Duration</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: "bold" }}></TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Registration</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -88,8 +88,61 @@ const ContestList = (props) => {
                                                     <TableCell component="th" scope="row" align="center" sx={{ width: "30%" }}>
                                                         <Typography>{contest.title}</Typography>
                                                     </TableCell>
+                                                    <TableCell align="center" sx={{ width: "15%" }}>
+                                                        {contest.authors.map((author) => (
+                                                            <Username key={author.username} user={author} />
+                                                        ))}
+                                                    </TableCell>
                                                     <TableCell align="center" sx={{ width: "20%" }}>
-                                                        <Username></Username>
+                                                        <Typography>{format(contest.start_time, "MMM/dd/yyyy")}</Typography>
+                                                        <Typography>{format(contest.start_time, "hh:mm OOOO")}</Typography>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: "10%" }}>
+                                                        <Typography>
+                                                            {new Date(contest.end_time - contest.start_time).toISOString().substring(11, 19)}
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </Grid>
+                            </Grid>
+                        </Paper>
+
+                        <Paper square sx={{ padding: "12px", marginTop: "30px" }} elevation={3}>
+                            <Grid container spacing={1} sx={{ width: "100%", margin: 0 }}>
+                                <Grid item xs={12} sx={{ textAlign: "center" }}>
+                                    <Typography variant="h4">Past Contests</Typography>
+                                </Grid>
+                                <Divider sx={{ width: "100%", marginTop: "20px" }} />
+
+                                <Grid item xs={12}>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Title</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Authors</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Start</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Duration</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Registration</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {pastContests.map((contest, index) => (
+                                                <TableRow key={index}
+                                                    hover
+                                                    sx={index % 2 ? { background: "white" } : { background: "#f7f7f7" }}>
+                                                    <TableCell component="th" scope="row" align="center" sx={{ width: "30%" }}>
+                                                        <Typography>{contest.title}</Typography>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ width: "15%" }}>
+                                                        {contest.authors.map((author) => (
+                                                            <Username key={author.username} user={author} />
+                                                        ))}
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "20%" }}>
                                                         <Typography>{format(contest.start_time, "MMM/dd/yyyy")}</Typography>
