@@ -49,6 +49,7 @@ const ContestList = (props) => {
                 setFutureContests([...fContests]);
 
                 setLoading(false);
+                document.title = "MathShowdown"
             }
         })
     }, []);
@@ -225,6 +226,8 @@ const ContestList = (props) => {
                             </Grid>
                         </Paper>
                     </Grid>
+                    <Grid item xs={2} />
+                    <Grid item xs={12} />
                 </Grid>
             }
         </div>

@@ -12,7 +12,7 @@ const Username = (props) => {
     return (
         <div>
             <Link to={`/profile/${props.user.username}`} title={`${user_rank} ${props.user.username}`}>
-                <Typography sx={{ color: user_color }}>{props.user.username}</Typography>
+                <Typography sx={{ color: user_color, fontWeight: "bold" }}>{props.user.username}</Typography>
             </Link>
         </div>
     );
