@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import format from "date-fns/format";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -128,7 +129,7 @@ const ContestList = (props) => {
                                                 <TableCell align="center" sx={{ fontWeight: "bold" }}>Authors</TableCell>
                                                 <TableCell align="center" sx={{ fontWeight: "bold" }}>Start</TableCell>
                                                 <TableCell align="center" sx={{ fontWeight: "bold" }}>Duration</TableCell>
-                                                <TableCell align="center" sx={{ fontWeight: "bold" }}>Registration</TableCell>
+                                                <TableCell align="center" sx={{ fontWeight: "bold" }}></TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -137,7 +138,9 @@ const ContestList = (props) => {
                                                     hover
                                                     sx={index % 2 ? { background: "white" } : { background: "#f7f7f7" }}>
                                                     <TableCell component="th" scope="row" align="center" sx={{ width: "30%" }}>
-                                                        <Typography>{contest.title}</Typography>
+                                                        <Link to={`/contest/${contest.id}`}>
+                                                            <Typography>{contest.title}</Typography>
+                                                        </Link>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "15%" }}>
                                                         {contest.authors.map((author) => (
@@ -154,7 +157,9 @@ const ContestList = (props) => {
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell align="center">
-
+                                                        <Link to={`/contest/${contest.id}/standings`}>
+                                                            <Typography>Final Standings</Typography>
+                                                        </Link>
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
