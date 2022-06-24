@@ -1,6 +1,6 @@
 
 const Colors = {
-    "Newbie": "grey",
+    "Newbie": "gray",
     "Pupil": "green",
     "Expert": "blue",
     "Candidate Master": "purple",

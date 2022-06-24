@@ -32,9 +32,13 @@ const Countdown = (props) => {
 
     return (
         <div>
-            <Typography variant="h6" sx={{ color: "#555555" }}>{timeLeft}</Typography>
+            <Typography variant={props.variant} sx={{ color: "#555555" }}>{timeLeft}</Typography>
         </div>
     );
 }
+
+Countdown.defaultProps = {
+    variant: "body1"
+};
 
 export default Countdown;
