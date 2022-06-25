@@ -113,7 +113,7 @@ const Create = (props) => {
             author_ids.push(user.id);
         }
 
-        const data = { ...contestInputs, authors: author_ids, startTime: startTime.getTime(), endTime: endTime.getTime(), problems };
+        const data = { ...contestInputs, authors: author_ids, startTime: startTime.setSeconds(0), endTime: endTime.setSeconds(0), problems };
 
         fetch("/api/contests", {
             method: "POST",
