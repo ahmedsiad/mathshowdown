@@ -113,4 +113,27 @@ router.post("/", authorized, ContestValidator, async(req, res) => {
     }
 });
 
+router.post("/:contest_id/register", authorized, async(req, res) => {
+    try {
+        const user_id = req.user;
+        const { contest_id } = req.params;
+
+        const participant_query = await pool.query("SELECT * FROM participants WHERE user_id = $1 AND contest_id = $2", [user_id, contest_id]);
+        if (participant_query.rows.length > 0) {
+            return res.status(409).json({ success: false, message: "User is already registered for this contest!" });
+        }
+
+        const user_query = await pool.query("SELECT rating FROM users WHERE id = $1", [user_id]);
+        const current_rating = user_query.rows[0].rating;
+
+        const create_query = await pool.query("INSERT INTO participants (user_id, contest_id, rating_before) VALUES ($1, $2, $3)",
+        [user_id, contest_id, current_rating]);
+
+        return res.status(201).json({ success: true, message: "User registered for contest" });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
 module.exports = router;

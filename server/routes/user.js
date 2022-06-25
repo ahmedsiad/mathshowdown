@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const pool = require("../config/db");
+const authorized = require("../middleware/authorization");
 
 router.get("/profile/:username", async(req, res) => {
     try {
@@ -23,7 +24,30 @@ router.get("/profile/:username", async(req, res) => {
     }
 });
 
-router.get("/profile/:username/submissions", async(req, res) =>{
+// get user via auth token
+router.get("/profile/", authorized, async(req, res) => {
+    try {
+        const user_id = req.user;
+        
+        const user_query = await pool.query("SELECT id, username, rating, registration_date FROM users WHERE id = $1", [user_id]);
+        if (user_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "User does not exist" });
+        }
+
+        const user = user_query.rows[0];
+        const history = await pool.query("SELECT * FROM participants WHERE user_id = $1", [user_id]);
+
+        user.contest_history = history.rows;
+
+        return res.status(200).json({ success: true, user: user });
+
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
+router.get("/profile/:username/submissions", async(req, res) => {
     try {
         const { username } = req.params;
 

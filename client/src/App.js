@@ -25,7 +25,7 @@ function App() {
     }).then((res) => {
       if (res.success) {
         setAuthenticated(true);
-        setAuthenticated(res.is_admin);
+        setIsAdmin(res.is_admin);
       } else {
         setAuthenticated(false);
       }
@@ -62,7 +62,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/contests" element={<ContestList />} />
+          <Route path="/contests" element={<ContestList authorized={authenticated} />} />
           <Route path="/contest/:id" element={<Contest />} />
           <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
           <Route path="/create/" element={<Create />} />
