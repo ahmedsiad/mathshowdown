@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Contest from "./pages/Contest";
