@@ -53,6 +53,8 @@ const ContestList = (props) => {
                         fContests.push(contest);
                     }
                 }
+                pContests.sort((a, b) => b.start_time - a.start_time);
+                fContests.sort((a, b) => a.start_time - b.start_time);
                 setPastContests([...pContests]);
                 setCurrentContests([...cContests]);
 
