@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import ContestTable from "../components/ContestTable";
+import Countdown from "../components/Countdown";
 
 const Contest = (props) => {
     const params = useParams();
@@ -61,11 +62,12 @@ const Contest = (props) => {
                         <Paper square sx={{ padding: "12px" }} elevation={3}>
                             <Grid container spacing={1} sx={{ width: "100%", margin: 0, textAlign: "center" }}>
                                 <Grid item xs={12}>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>{contest.title}</Typography>
+                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>{contest.title} (Div. {contest.division})</Typography>
                                 </Grid>
                                 <Divider sx={{ width: "100%" }} />
                                 <Grid item xs={12}>
                                     <Typography variant="body1" sx={{ fontWeight: "lighter" }}>Time Remaining:</Typography>
+                                    <Countdown timestamp={contest.end_time} variant="h6" />
                                 </Grid>
                             </Grid>
                         </Paper>
