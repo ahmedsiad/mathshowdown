@@ -4,6 +4,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import CircularProgress from "@mui/material/CircularProgress";
 import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -15,6 +16,7 @@ import Create from "./pages/Create";
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const checkAuthentication = () => {
     fetch("/api/auth/verify", {
@@ -29,6 +31,7 @@ function App() {
       } else {
         setAuthenticated(false);
       }
+      setLoading(false);
     })
   }
 
@@ -58,16 +61,23 @@ function App() {
         </AppBar>
         <Toolbar />
       </Box>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/contests" element={<ContestList authorized={authenticated} />} />
-          <Route path="/contest/:id" element={<Contest />} />
-          <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
-          <Route path="/create/" element={<Create />} />
-        </Routes>
-      </BrowserRouter>
+      {loading &&
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <CircularProgress />
+        </Box>
+      }
+      {!loading &&
+        <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/contests" element={<ContestList authorized={authenticated} />} />
+              <Route path="/contest/:id" element={<Contest />} />
+              <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
+              <Route path="/create/" element={<Create />} />
+            </Routes>
+        </BrowserRouter>
+      }
     </div>
   );
 }

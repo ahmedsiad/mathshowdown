@@ -67,11 +67,10 @@ const ContestList = (props) => {
                             const userHistory = res2.user.contest_history;
                             for (const contest of fContests) {
                                 const participantIndex = userHistory.findIndex((p) => p.contest_id === contest.id);
-                                console.log(participantIndex);
                                 contest.registered = (participantIndex !== -1) ? true : false;
                             }
-                            setFutureContests([...fContests]);
                             setLoading(false);
+                            setFutureContests([...fContests]);
                         }
                     });
                 } else {
