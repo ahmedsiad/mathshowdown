@@ -1,5 +1,5 @@
 /* global MathJax */
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useParams, Link } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
@@ -9,6 +9,8 @@ import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import LockIcon from "@mui/icons-material/Lock";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import Countdown from "../components/Countdown";
 
 const Problem = (props) => {
@@ -80,6 +82,7 @@ const Problem = (props) => {
             if (answer.length === 0 || answer.length > 32) {
                 setErrors({ ...errors, answer: true });
                 setHelpers({ ...helpers, answer: "Invalid Answer" });
+                setButtonLocked(false);
                 return;
             }
 
@@ -149,7 +152,18 @@ const Problem = (props) => {
                                     <Button
                                         variant="contained"
                                         color={(locked) ? "error" : "primary"}
-                                        onClick={submit}>{(locked) ? "Unlock" : "Lock in"}</Button>
+                                        onClick={submit}>
+                                        {locked &&
+                                            <Fragment>
+                                                <LockOpenIcon />&nbsp;Unlock
+                                            </Fragment>
+                                        }
+                                        {!locked &&
+                                            <Fragment>
+                                                <LockIcon />&nbsp;Lock In
+                                            </Fragment>
+                                        }
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Paper>
