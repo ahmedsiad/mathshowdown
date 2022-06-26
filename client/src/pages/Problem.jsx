@@ -22,23 +22,37 @@ const Problem = (props) => {
     const [errors, setErrors] = useState({ answer: false });
     const [helpers, setHelpers] = useState({ answer: "" });
 
+    const [locked, setLocked] = useState(false);
+    const [buttonLocked, setButtonLocked] = useState(false);
+
 
     useEffect(() => {
         const { contest_id, problem_index } = params;
 
         Promise.all([
-            fetch("/api/contests/" + contest_id, { method: "GET" }),
-            fetch("/api/contests/" + contest_id + "/problems/" + problem_index, { method: "GET" })
-        ]).then(([res1, res2]) => {
-            return Promise.all([res1.json(), res2.json()]);
-        }).then(([res1, res2]) => {
+            fetch(`/api/contests/${contest_id}`, { method: "GET" }),
+            fetch(`/api/contests/${contest_id}/problems/${problem_index}`, { method: "GET" }),
+            fetch(`/api/contests/${contest_id}/problems/${problem_index}/submissions`, {
+                method: "GET",
+                headers: { "Authorization": "Bearer " + sessionStorage.getItem("auth_token") }
+            })
+        ]).then(([res1, res2, res3]) => {
+            return Promise.all([res1.json(), res2.json(), res3.json()]);
+        }).then(([res1, res2, res3]) => {
             if (res1.success && res2.success) {
-                console.log(res1, res2);
                 setContest(res1.contest);
                 setProblem(res2.problem);
                 setLoading(false);
             } else {
                 window.location = "/";
+            }
+
+            if (res3.success) {
+                setInputs(prevState => ({
+                    ...prevState,
+                    answer: res3.submission.answer
+                }));
+                setLocked(true);
             }
         });
     }, []);
@@ -57,8 +71,47 @@ const Problem = (props) => {
     }
 
     const submit = (event) => {
+        if (buttonLocked) return;
+        setButtonLocked(true);
 
+        const { contest_id, problem_index } = params;
+        if (!locked) {
+            const answer = inputs.answer.trim();
+            if (answer.length === 0 || answer.length > 32) {
+                setErrors({ ...errors, answer: true });
+                setHelpers({ ...helpers, answer: "Invalid Answer" });
+                return;
+            }
+
+            const data = { answer };
+
+            fetch(`/api/contests/${contest_id}/problems/${problem_index}/submissions`, {
+                method: "POST",
+                headers: { "Content-type": "application/json", "Authorization": "Bearer " + sessionStorage.getItem("auth_token") },
+                body: JSON.stringify(data)
+            }).then((response) => {
+                return response.json();
+            }).then((res) => {
+                if (res.success) {
+                    setLocked(true);
+                }
+                setButtonLocked(false);
+            });
+        } else {
+            fetch(`/api/contests/${contest_id}/problems/${problem_index}/submissions`, {
+                method: "DELETE",
+                headers: { "Authorization": "Bearer " + sessionStorage.getItem("auth_token") }
+            }).then((response) => {
+                return response.json();
+            }).then((res) => {
+                if (res.success) {
+                    setLocked(false);
+                }
+                setButtonLocked(false);
+            });
+        }
     }
+
     return (
         <div>
             {loading &&
@@ -87,12 +140,16 @@ const Problem = (props) => {
                                         label="Answer"
                                         type="number"
                                         variant="standard"
+                                        disabled={locked}
                                         error={errors.answer}
                                         helperText={helpers.answer}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sx={{ marginTop: "10px", textAlign: "center" }}>
-                                    <Button variant="contained" onClick={submit}>Lock In</Button>
+                                    <Button
+                                        variant="contained"
+                                        color={(locked) ? "error" : "primary"}
+                                        onClick={submit}>{(locked) ? "Unlock" : "Lock in"}</Button>
                                 </Grid>
                             </Grid>
                         </Paper>

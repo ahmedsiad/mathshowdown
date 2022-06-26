@@ -58,7 +58,22 @@ const ContestValidator = async(req, res, next) => {
         }
 
         next();
-    } catch {
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+}
+
+const SubmissionValidator = async(req, res, next) => {
+    try {
+        const { answer } = req.body;
+        
+        if (answer.length === 0 || answer.length > 32) {
+            return res.status(400).json({ success: false, message: "Invalid submission" });
+        }
+
+        next();
+    } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
     }
@@ -66,5 +81,6 @@ const ContestValidator = async(req, res, next) => {
 
 module.exports = {
     RegisterValidator,
-    ContestValidator
+    ContestValidator,
+    SubmissionValidator
 };

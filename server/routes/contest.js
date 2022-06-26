@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const pool = require("../config/db");
 const authorized = require("../middleware/authorization");
-const { ContestValidator } = require("../middleware/validators");
+const { ContestValidator, SubmissionValidator } = require("../middleware/validators");
 
 router.get("/:id", async(req, res) => {
     try {
@@ -13,6 +13,22 @@ router.get("/:id", async(req, res) => {
         }
 
         return res.status(200).json({ success: true, contest: contest_query.rows[0] });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
+router.get("/:id/problems", async(req, res) => {
+    try {
+        const { id } = req.params;
+
+        const problem_query = await pool.query("SELECT * FROM problems WHERE contest_id = $1", [id]);
+        if (problem_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Contest does not exist" });
+        }
+
+        return res.status(200).json({ success: true, problems: problem_query.rows });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
@@ -35,16 +51,24 @@ router.get("/:id/problems/:problem_index", async(req, res) => {
     }
 });
 
-router.get("/:id/problems", async(req, res) => {
+router.get("/:contest_id/problems/:problem_index/submissions", authorized, async(req, res) => {
     try {
-        const { id } = req.params;
+        const { contest_id, problem_index} = req.params;
+        const user_id = req.user;
 
-        const problem_query = await pool.query("SELECT * FROM problems WHERE contest_id = $1", [id]);
+        const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1 AND problem_index = $2", [contest_id, problem_index]);
         if (problem_query.rows.length === 0) {
-            return res.status(404).json({ success: false, message: "Contest does not exist" });
+            return res.status(404).json({ success: false, message: "Problem does not exist" });
+        }
+        const problem = problem_query.rows[0];
+
+        const submission_query = await pool.query("SELECT * FROM submissions WHERE user_id = $1 AND problem_id = $2", [user_id, problem.id]);
+
+        if (submission_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Submission does not exist" });
         }
 
-        return res.status(200).json({ success: true, problems: problem_query.rows });
+        return res.status(200).json({ success: true, submission: submission_query.rows[0]});
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
@@ -130,6 +154,53 @@ router.post("/:contest_id/register", authorized, async(req, res) => {
         [user_id, contest_id, current_rating]);
 
         return res.status(201).json({ success: true, message: "User registered for contest" });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
+router.post("/:contest_id/problems/:problem_index/submissions", authorized, SubmissionValidator, async(req, res) => {
+    try {
+        const { contest_id, problem_index } = req.params;
+        const { answer } = req.body;
+        const user_id = req.user;
+
+        const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1 AND problem_index = $2", [contest_id, problem_index]);
+        if (problem_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Problem does not exist" });
+        }
+        const problem = problem_query.rows[0];
+
+        const submission_query = await pool.query("SELECT * FROM submissions WHERE user_id = $1 AND problem_id = $2", [user_id, problem.id]);
+        if (submission_query.rows.length !== 0) {
+            return res.status(409).json({ success: false, message: "Submission already exists" });
+        }
+        
+        const post_query = await pool.query("INSERT INTO submissions (user_id, problem_id, answer, submission_time) VALUES ($1, $2, $3, $4)",
+        [user_id, problem.id, answer, Date.now()]);
+
+        return res.status(201).json({ success: true, message: "Submission successfully created" });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
+router.delete("/:contest_id/problems/:problem_index/submissions", authorized, async(req, res) => {
+    try {
+        const { contest_id, problem_index } = req.params;
+        const user_id = req.user;
+
+        const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1 AND problem_index = $2", [contest_id, problem_index]);
+        if (problem_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Problem does not exist" });
+        }
+        const problem = problem_query.rows[0];
+
+        const submission_query = await pool.query("DELETE FROM submissions WHERE user_id = $1 AND problem_id = $2", [user_id, problem.id]);
+
+        return res.status(200).json({ success: true, message: "Submission successfully deleted" });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
