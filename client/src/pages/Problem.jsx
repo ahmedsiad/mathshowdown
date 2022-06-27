@@ -26,6 +26,8 @@ const Problem = (props) => {
 
     const [locked, setLocked] = useState(false);
     const [buttonLocked, setButtonLocked] = useState(false);
+    const [contestOver, setContestOver] = useState(false);
+    const [participating, setParticipating] = useState(true);
 
 
     useEffect(() => {
@@ -49,12 +51,18 @@ const Problem = (props) => {
                 window.location = "/";
             }
 
+            const over = res1.contest.end_time <= Date.now();
+            setContestOver(over);
+
             if (res3.success) {
                 setInputs(prevState => ({
                     ...prevState,
                     answer: res3.submission.answer
                 }));
                 setLocked(true);
+
+            } else if (res3.message !== "Submission does not exist") {
+                setParticipating(false);
             }
         });
     }, []);
@@ -143,7 +151,7 @@ const Problem = (props) => {
                                         label="Answer"
                                         type="number"
                                         variant="standard"
-                                        disabled={locked}
+                                        disabled={locked || contestOver || !participating}
                                         error={errors.answer}
                                         helperText={helpers.answer}
                                     />
@@ -152,6 +160,7 @@ const Problem = (props) => {
                                     <Button
                                         variant="contained"
                                         color={(locked) ? "error" : "primary"}
+                                        disabled={contestOver || !participating}
                                         onClick={submit}>
                                         {locked &&
                                             <Fragment>

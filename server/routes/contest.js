@@ -35,16 +35,32 @@ router.get("/:id/problems", async(req, res) => {
     }
 });
 
-router.get("/:id/problems/:problem_index", async(req, res) => {
+router.get("/:contest_id/problems/:problem_index", async(req, res) => {
     try {
-        const { id, problem_index } = req.params;
+        const { contest_id, problem_index } = req.params;
+        const now = Date.now();
 
-        const problem_query = await pool.query("SELECT * FROM problems WHERE contest_id = $1 AND problem_index = $2", [id, problem_index]);
+        const contest_query = await pool.query("SELECT start_time, end_time FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Contest does not exist" });
+        }
+        const contest = contest_query.rows[0];
+
+        if (now < contest.start_time) {
+            return res.status(403).json({ success: false, message: "This contest hasn't started!" });
+        }
+
+        const problem_query = await pool.query("SELECT * FROM problems WHERE contest_id = $1 AND problem_index = $2", [contest_id, problem_index]);
         if (problem_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "Problem does not exist" });
         }
+        const problem = problem_query.rows[0];
 
-        return res.status(200).json({ success: true, problem: problem_query.rows[0] });
+        if (now < contest.end_time) {
+            problem.answer = null;
+        }
+
+        return res.status(200).json({ success: true, problem: problem });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
@@ -182,7 +198,7 @@ router.post("/:contest_id/problems/:problem_index/submissions", authorized, Subm
         if (participant_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "User is not registered for this contest" });
         }
-        const participant = problem_query.rows[0];
+        const participant = participant_query.rows[0];
 
         const submission_query = await pool.query("SELECT * FROM submissions WHERE participant_id = $1 AND problem_id = $2", [participant.id, problem.id]);
         if (submission_query.rows.length !== 0) {
@@ -214,7 +230,7 @@ router.delete("/:contest_id/problems/:problem_index/submissions", authorized, as
         if (participant_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "User is not registered for this contest" });
         }
-        const participant = problem_query.rows[0];
+        const participant = participant_query.rows[0];
 
         const submission_query = await pool.query("DELETE FROM submissions WHERE participant_id = $1 AND problem_id = $2", [participant.id, problem.id]);
 
