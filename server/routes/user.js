@@ -81,6 +81,33 @@ router.get("/:username", async(req, res) => {
     }
 });
 
+router.get("/contests/:contest_id/submissions", authorized, async(req, res) => {
+    try {
+        const { contest_id } = req.params;
+        const user_id = req.user;
+
+        const participant_query = await pool.query("SELECT id FROM participants WHERE user_id = $1 AND contest_id = $2", [user_id, contest_id]);
+        if (participant_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "User is not registered for this contest" });
+        }
+        const participant = participant_query.rows[0];
+
+        const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1", [contest_id]);
+        if (problem_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Contest does not exist" });
+        }
+        const problem_ids = problem_query.rows.map((p) => p.id);
+
+        const submissions_query = await pool.query("SELECT * FROM submissions WHERE participant_id = $1 AND problem_id = ANY ($2)",
+        [participant.id, problem_ids]);
+
+        return res.status(200).json({ success: true, submissions: submissions_query.rows });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
 router.get("/", async(req, res) => {
     try {
         const users_query = await pool.query("SELECT id, username, rating, registration_date FROM users");

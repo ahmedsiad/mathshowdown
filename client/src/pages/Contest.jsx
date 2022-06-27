@@ -19,11 +19,15 @@ const Contest = (props) => {
     useEffect(() => {
         const contest_id = params.id;
         Promise.all([
-            fetch("/api/contests/" + contest_id, { method: "GET" }),
-            fetch("/api/contests/" + contest_id + "/problems", { method: "GET" })
-        ]).then(([res1, res2]) => {
-            return Promise.all([res1.json(), res2.json()]);
-        }).then(([res1, res2]) => {
+            fetch(`/api/contests/${contest_id}`, { method: "GET" }),
+            fetch(`/api/contests/${contest_id}/problems`, { method: "GET" }),
+            fetch(`/api/users/contests/${contest_id}/submissions`, {
+                method: "GET",
+                headers: { "Authorization": "Bearer " + sessionStorage.getItem("auth_token") }
+            })
+        ]).then(([res1, res2, res3]) => {
+            return Promise.all([res1.json(), res2.json(), res3.json()]);
+        }).then(([res1, res2, res3]) => {
             if (res1.success && res2.success) {
                 console.log(res1, res2);
                 setContest(res1.contest);
@@ -32,6 +36,8 @@ const Contest = (props) => {
             } else {
                 window.location = "/";
             }
+
+            console.log(res3);
         });
     }, []);
 
