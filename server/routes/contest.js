@@ -62,7 +62,13 @@ router.get("/:contest_id/problems/:problem_index/submissions", authorized, async
         }
         const problem = problem_query.rows[0];
 
-        const submission_query = await pool.query("SELECT * FROM submissions WHERE user_id = $1 AND problem_id = $2", [user_id, problem.id]);
+        const participant_query = await pool.query("SELECT id FROM participants WHERE user_id = $1 AND contest_id = $2", [user_id, contest_id]);
+        if (participant_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "User is not registered for this contest" });
+        }
+        const participant = participant_query.rows[0];
+
+        const submission_query = await pool.query("SELECT * FROM submissions WHERE participant_id = $1 AND problem_id = $2", [participant.id, problem.id]);
 
         if (submission_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "Submission does not exist" });
@@ -172,13 +178,19 @@ router.post("/:contest_id/problems/:problem_index/submissions", authorized, Subm
         }
         const problem = problem_query.rows[0];
 
-        const submission_query = await pool.query("SELECT * FROM submissions WHERE user_id = $1 AND problem_id = $2", [user_id, problem.id]);
+        const participant_query = await pool.query("SELECT id FROM participants WHERE user_id = $1 AND contest_id = $2", [user_id, contest_id]);
+        if (participant_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "User is not registered for this contest" });
+        }
+        const participant = problem_query.rows[0];
+
+        const submission_query = await pool.query("SELECT * FROM submissions WHERE participant_id = $1 AND problem_id = $2", [participant.id, problem.id]);
         if (submission_query.rows.length !== 0) {
             return res.status(409).json({ success: false, message: "Submission already exists" });
         }
         
-        const post_query = await pool.query("INSERT INTO submissions (user_id, problem_id, answer, submission_time) VALUES ($1, $2, $3, $4)",
-        [user_id, problem.id, answer, Date.now()]);
+        const post_query = await pool.query("INSERT INTO submissions (participant_id, problem_id, answer, submission_time) VALUES ($1, $2, $3, $4)",
+        [participant.id, problem.id, answer, Date.now()]);
 
         return res.status(201).json({ success: true, message: "Submission successfully created" });
     } catch (err) {
@@ -198,7 +210,13 @@ router.delete("/:contest_id/problems/:problem_index/submissions", authorized, as
         }
         const problem = problem_query.rows[0];
 
-        const submission_query = await pool.query("DELETE FROM submissions WHERE user_id = $1 AND problem_id = $2", [user_id, problem.id]);
+        const participant_query = await pool.query("SELECT id FROM participants WHERE user_id = $1 AND contest_id = $2", [user_id, contest_id]);
+        if (participant_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "User is not registered for this contest" });
+        }
+        const participant = problem_query.rows[0];
+
+        const submission_query = await pool.query("DELETE FROM submissions WHERE participant_id = $1 AND problem_id = $2", [participant.id, problem.id]);
 
         return res.status(200).json({ success: true, message: "Submission successfully deleted" });
     } catch (err) {

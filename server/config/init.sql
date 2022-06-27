@@ -40,9 +40,10 @@ CREATE TABLE problem_tags (
 );
 
 CREATE TABLE participants (
+    id SERIAL PRIMARY KEY,
     user_id int REFERENCES users(id),
     contest_id int REFERENCES contests(id),
-    PRIMARY KEY (user_id, contest_id),
+    UNIQUE(user_id, contest_id),
     rating_before int,
     rating_after int,
     solved int,
@@ -50,9 +51,9 @@ CREATE TABLE participants (
 );
 
 CREATE TABLE submissions (
-    user_id int REFERENCES users(id),
+    participant_id int REFERENCES participants(id),
     problem_id int REFERENCES problems(id),
-    PRIMARY KEY (user_id, problem_id),
+    PRIMARY KEY (participant_id, problem_id),
     answer VARCHAR(32),
     submission_time bigint,
     verdict boolean

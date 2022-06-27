@@ -181,7 +181,7 @@ const Problem = (props) => {
                                 <Divider sx={{ width: "100%" }} />
                                 <Grid item xs={12}>
                                     <Typography variant="body1" sx={{ fontWeight: "lighter" }}>Time Remaining:</Typography>
-                                    <Countdown timestamp={contest.end_time} />
+                                    <Countdown timestamp={contest.end_time} variant="h6" />
                                 </Grid>
                             </Grid>
                         </Paper>
