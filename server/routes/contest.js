@@ -97,6 +97,37 @@ router.get("/:contest_id/problems/:problem_index/submissions", authorized, async
     }
 });
 
+router.get("/:contest_id/problemStatistics", async(req, res) => {
+    try {
+        const { contest_id } = req.params;
+
+        const contest_query = await pool.query("SELECT graded FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Contest does not exist" });
+        }
+        const contest = contest_query.rows[0];
+
+        const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1", [contest_id]);
+        const problems = problem_query.rows;
+        const result = {};
+
+        for (const problem of problems) {
+            const total_count_query = await pool.query("SELECT COUNT(*) FROM submissions WHERE problem_id = $1", [problem.id]);
+            result[problem.id] = { total_submissions: 0, correct_submissions: 0 };
+            result[problem.id].total_submissions = total_count_query.rows[0].count;
+
+            if (contest.graded) {
+                const correct_count_query = await pool.query("SELECT COUNT(*) FROM submissions WHERE problem_id = $1 AND verdict = TRUE", [problem.id]);
+                result[problem.id].correct_submissions = correct_count_query.rows[0].count;
+            }
+        }
+
+        return res.status(200).json({ success: true, problem_statistics: result });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
 
 router.get("/:id/users", async(req, res) => {
     try {

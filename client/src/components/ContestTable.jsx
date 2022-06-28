@@ -9,6 +9,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
+import PersonIcon from "@mui/icons-material/Person";
 
 const ContestTable = (props) => {
     const submissions = {};
@@ -26,7 +27,6 @@ const ContestTable = (props) => {
                         <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
                         <TableCell align="center" sx={{ fontWeight: "bold" }}>Status</TableCell>
                         <TableCell align="center" sx={{ fontWeight: "bold" }}>%</TableCell>
-                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -60,9 +60,13 @@ const ContestTable = (props) => {
                                 }
                             </TableCell>
                             <TableCell align="center" sx={{ width: "10%" }}>
-
+                                {!props.contestGraded &&
+                                    <Typography sx={{ verticalAlign: "middle", display: "inline-flex" }}>
+                                        <PersonIcon />
+                                        &nbsp;x{props.problemStatistics[problem.id].total_submissions}
+                                    </Typography>
+                                }
                             </TableCell>
-                            <TableCell></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

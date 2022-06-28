@@ -15,7 +15,8 @@ CREATE TABLE contests (
     title VARCHAR(64),
     division int,
     start_time bigint,
-    end_time bigint
+    end_time bigint,
+    graded boolean NOT NULL default False
 );
 
 CREATE TABLE problems (

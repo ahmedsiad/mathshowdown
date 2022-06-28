@@ -15,6 +15,7 @@ const Contest = (props) => {
     const [loading, setLoading] = useState(true);
     const [contest, setContest] = useState({});
     const [problems, setProblems] = useState([]);
+    const [problemStatistics, setProblemStatistics] = useState({});
 
     const [submissions, setSubmissions] = useState([]);
     const [participating, setParticipating] = useState(false);
@@ -25,29 +26,31 @@ const Contest = (props) => {
         Promise.all([
             fetch(`/api/contests/${contest_id}`, { method: "GET" }),
             fetch(`/api/contests/${contest_id}/problems`, { method: "GET" }),
+            fetch(`/api/contests/${contest_id}/problemStatistics`, { method: "GET" }),
             fetch(`/api/users/contests/${contest_id}/submissions`, {
                 method: "GET",
                 headers: { "Authorization": "Bearer " + sessionStorage.getItem("auth_token") }
             })
-        ]).then(([res1, res2, res3]) => {
-            return Promise.all([res1.json(), res2.json(), res3.json()]);
-        }).then(([res1, res2, res3]) => {
-            if (res1.success && res2.success) {
+        ]).then(([res1, res2, res3, res4]) => {
+            return Promise.all([res1.json(), res2.json(), res3.json(), res4.json()]);
+        }).then(([res1, res2, res3, res4]) => {
+            if (res1.success && res2.success && res3.success) {
                 console.log(res1, res2);
                 setContest(res1.contest);
                 setProblems(res2.problems);
+                setProblemStatistics(res3.problem_statistics);
                 setLoading(false);
             } else {
                 window.location = "/";
             }
 
-            if (res3.success) {
-                res3.submissions.sort((a, b) => a.problem_id - b.problem_id);
-                setSubmissions(res3.submissions);
+            if (res4.success) {
+                res4.submissions.sort((a, b) => a.problem_id - b.problem_id);
+                setSubmissions(res4.submissions);
                 setParticipating(true);
             }
 
-            console.log(res3);
+            console.log(res3, res4);
         });
     }, []);
 
@@ -74,6 +77,7 @@ const Contest = (props) => {
                                         submissions={submissions}
                                         participating={participating}
                                         contestGraded={contestGraded}
+                                        problemStatistics={problemStatistics}
                                         path={window.location.pathname} />
                                 </Grid>
                             </Grid>
