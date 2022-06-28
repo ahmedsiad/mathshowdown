@@ -16,6 +16,10 @@ const Contest = (props) => {
     const [contest, setContest] = useState({});
     const [problems, setProblems] = useState([]);
 
+    const [submissions, setSubmissions] = useState([]);
+    const [participating, setParticipating] = useState(false);
+    const [contestGraded, setContestGraded] = useState(false);
+
     useEffect(() => {
         const contest_id = params.id;
         Promise.all([
@@ -35,6 +39,12 @@ const Contest = (props) => {
                 setLoading(false);
             } else {
                 window.location = "/";
+            }
+
+            if (res3.success) {
+                res3.submissions.sort((a, b) => a.problem_id - b.problem_id);
+                setSubmissions(res3.submissions);
+                setParticipating(true);
             }
 
             console.log(res3);
@@ -59,7 +69,12 @@ const Contest = (props) => {
                                 </Grid>
                                 <Divider sx={{ width: "100%" }} />
                                 <Grid item xs={12}>
-                                    <ContestTable problems={problems} path={window.location.pathname} />
+                                    <ContestTable
+                                        problems={problems}
+                                        submissions={submissions}
+                                        participating={participating}
+                                        contestGraded={contestGraded}
+                                        path={window.location.pathname} />
                                 </Grid>
                             </Grid>
                         </Paper>
