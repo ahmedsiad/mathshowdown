@@ -38,6 +38,7 @@ const Contest = (props) => {
             if (res1.success && res2.success && res3.success) {
                 console.log(res1, res2);
                 setContest(res1.contest);
+                setContestGraded(res1.contest.graded);
                 setProblems(res2.problems);
                 setProblemStatistics(res3.problem_statistics);
                 setLoading(false);

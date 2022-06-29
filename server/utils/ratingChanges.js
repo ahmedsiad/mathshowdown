@@ -63,7 +63,6 @@ const calculateRatingChanges = async(contest) => {
         const rating_change = Math.floor((adjusted - participants[i].rating_before) / 2);
         const new_rating = participants[i].rating_before + rating_change;
 
-        console.log(seed, mean, new_rating);
         await pool.query("UPDATE participants SET rating_after = $1 WHERE id = $2", [new_rating, participants[i].id]);
         await pool.query("UPDATE users SET rating = $1 WHERE id = $2", [new_rating, participants[i].user_id]);
     }

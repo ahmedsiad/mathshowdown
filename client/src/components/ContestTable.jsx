@@ -5,6 +5,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import CheckIcon from "@mui/icons-material/Check";
@@ -40,7 +41,7 @@ const ContestTable = (props) => {
                                     <Typography variant="body1">{problem.problem_index}</Typography>
                                 </Link>
                             </TableCell>
-                            <TableCell sx={{ width: "70%" }}>
+                            <TableCell sx={{ width: "65%" }}>
                                 <Link to={`${props.path}/problem/` + problem.problem_index} style={{ textDecoration: "none" }}>
                                     <Typography variant="body1">{problem.title}</Typography>
                                 </Link>
@@ -59,11 +60,20 @@ const ContestTable = (props) => {
                                     <LockOpenIcon />
                                 }
                             </TableCell>
-                            <TableCell align="center" sx={{ width: "10%" }}>
+                            <TableCell align="center" sx={{ width: "15%" }}>
                                 {!props.contestGraded &&
-                                    <Typography sx={{ verticalAlign: "middle", display: "inline-flex" }}>
+                                    <Typography sx={{ verticalAlign: "middle", display: "inline-flex", fontWeight: "bold" }}>
                                         <PersonIcon />
                                         &nbsp;x{props.problemStatistics[problem.id].total_submissions}
+                                    </Typography>
+                                }
+                                {props.contestGraded &&
+                                    <Typography sx={{ verticalAlign: "middle", display: "inline-flex", fontWeight: "bold" }}>
+                                        <PersonIcon />
+                                        <Box component="span" sx={{ color: "green" }}>
+                                            &nbsp;{props.problemStatistics[problem.id].correct_submissions}
+                                        </Box>
+                                        &nbsp;/ {props.problemStatistics[problem.id].total_submissions}
                                     </Typography>
                                 }
                             </TableCell>
