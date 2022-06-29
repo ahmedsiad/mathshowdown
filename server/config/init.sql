@@ -48,6 +48,7 @@ CREATE TABLE participants (
     rating_before int,
     rating_after int,
     solved int,
+    penalty int,
     rank int
 );
 

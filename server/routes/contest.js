@@ -2,6 +2,7 @@ const router = require("express").Router();
 const pool = require("../config/db");
 const authorized = require("../middleware/authorization");
 const { ContestValidator, SubmissionValidator } = require("../middleware/validators");
+const calculateRatingChanges = require("../utils/ratingChanges");
 
 router.get("/:id", async(req, res) => {
     try {
@@ -207,6 +208,15 @@ router.post("/:contest_id/register", authorized, async(req, res) => {
         [user_id, contest_id, current_rating]);
 
         return res.status(201).json({ success: true, message: "User registered for contest" });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
+router.post("/:contest_id/grade", authorized, async(req, res) => {
+    try {
+        
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
