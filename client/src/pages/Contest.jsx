@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import ContestTable from "../components/ContestTable";
 import Countdown from "../components/Countdown";
+import Button from "@mui/material/Button";
 
 const Contest = (props) => {
     const params = useParams();
@@ -54,6 +55,18 @@ const Contest = (props) => {
         });
     }, []);
 
+    const testRatings = (event) => {
+        const contest_id = params.id;
+        fetch(`/api/contests/${contest_id}/grade`, {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + sessionStorage.getItem("auth_token") }
+        }).then((response) => {
+            return response.json();
+        }).then((res) => {
+            console.log(res);
+        });
+    }
+
     return (
         <div>
             {loading &&
@@ -93,6 +106,7 @@ const Contest = (props) => {
                                 <Grid item xs={12}>
                                     <Typography variant="body1" sx={{ fontWeight: "lighter" }}>Time Remaining:</Typography>
                                     <Countdown timestamp={contest.end_time} variant="h6" />
+                                    <Button onClick={testRatings}>Test</Button>
                                 </Grid>
                             </Grid>
                         </Paper>

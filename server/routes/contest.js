@@ -216,7 +216,25 @@ router.post("/:contest_id/register", authorized, async(req, res) => {
 
 router.post("/:contest_id/grade", authorized, async(req, res) => {
     try {
-        
+        const { contest_id } = req.params;
+
+        const contest_query = await pool.query("SELECT * FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Contest does not exist" });
+        }
+        const contest = contest_query.rows[0];
+
+        if (contest.graded) {
+            return res.status(409).json({ success: false, message: "Contest has already been graded" });
+        }
+        if (Date.now() < contest.end_time) {
+            return res.status(400).json({ success: false, message: "Contest hasn't finished yet" });
+        }
+
+        await calculateRatingChanges(contest);
+        await pool.query("UPDATE contests SET graded = TRUE WHERE id = $1", [contest_id]);
+
+        return res.status(200).json({ success: true, message: "Contest graded" });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });

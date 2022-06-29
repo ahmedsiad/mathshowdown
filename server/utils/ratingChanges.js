@@ -23,14 +23,14 @@ const calculateRatingChanges = async(contest) => {
                 verdict = true;
             }
             
-            const verdict_query = await pool.query("UPDATE submissions SET verdict = $1 WHERE participant_id = $1 AND problem_id = $2",
-            [submission.participant_id, submission.problem_id]);
+            const verdict_query = await pool.query("UPDATE submissions SET verdict = $1 WHERE participant_id = $2 AND problem_id = $3",
+            [verdict, submission.participant_id, submission.problem_id]);
         }
         penalty = Math.round(penalty / 1000);
         participant.solved = solved;
         participant.penalty = penalty;
 
-        const results_query = await pool.query("UPDATE participants SET solved = $1 AND penalty = $2 WHERE id = $3", [solved, penalty, participant.id]);
+        const results_query = await pool.query("UPDATE participants SET solved = $1, penalty = $2 WHERE id = $3", [solved, penalty, participant.id]);
     }
 
     // sort by solved then penalty
@@ -63,8 +63,9 @@ const calculateRatingChanges = async(contest) => {
         const rating_change = Math.floor((adjusted - participants[i].rating_before) / 2);
         const new_rating = participants[i].rating_before + rating_change;
 
+        console.log(seed, mean, new_rating);
         await pool.query("UPDATE participants SET rating_after = $1 WHERE id = $2", [new_rating, participants[i].id]);
-        await pool.query("UPDATE users SET rating = $1 WHERE id = $2", [new_rating, participants.user_id]);
+        await pool.query("UPDATE users SET rating = $1 WHERE id = $2", [new_rating, participants[i].user_id]);
     }
 
 }
@@ -80,18 +81,18 @@ function binarySearch(participants, i, mean) {
         const mid_seed = calculateSeed(participants, i, mid);
 
         if (mid_seed === mean) return mid;
-        if (mid_seed < mean) left = mid + 1;
-        if (mid_seed > mean) right = mid - 1;
+        if (mid_seed < mean) right = mid - 1;
+        if (mid_seed > mean) left = mid + 1;
     }
     return left;
 } 
 
 
 function calculateSeed(participants, i, r) {
-    let seed = 0;
+    let seed = 1;
     for (let j = 0; j < participants.length; j++) {
         if (j == i) continue;
-        seed += calculateProbability(r, participants[i].rating_before);
+        seed += calculateProbability(participants[j].rating_before, r);
     }
     return seed;
 }
