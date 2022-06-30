@@ -130,6 +130,36 @@ router.get("/:contest_id/problemStatistics", async(req, res) => {
     }
 });
 
+router.get("/:contest_id/standings", async(req, res) => {
+    try {
+        const { contest_id } = req.params;
+        const page = (req.query.page) ? req.query.page : 0;
+
+        const contest_query = await pool.query("SELECT graded FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Contest does not exist" });
+        }
+        if (!contest_query.rows[0].graded) {
+            return res.status(404).json({ success: false, message: "Contest has not been graded" });
+        }
+
+        const participant_query = await pool.query(`SELECT p.*, u.username FROM participants p INNER JOIN users u ON u.id = p.user_id
+        WHERE p.contest_id = $1 ORDER BY p.rank OFFSET $2 ROWS FETCH NEXT 100 ROWS ONLY`, [contest_id, page * 100]);
+        const participants = participant_query.rows;
+
+        for (const participant of participants) {
+            const submission_query = await pool.query("SELECT submission_time, verdict FROM submissions WHERE participant_id = $1 ORDER BY problem_id",
+            [participant.id]);
+            participant.submissions = submission_query.rows;
+        }
+
+        return res.status(200).json({ success: true, participants: participants });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
 router.get("/:id/users", async(req, res) => {
     try {
         const { id } = req.params;
