@@ -23,7 +23,7 @@ const Contest = (props) => {
     const [contestGraded, setContestGraded] = useState(false);
 
     useEffect(() => {
-        const contest_id = params.id;
+        const contest_id = params.contest_id;
         Promise.all([
             fetch(`/api/contests/${contest_id}`, { method: "GET" }),
             fetch(`/api/contests/${contest_id}/problems`, { method: "GET" }),
@@ -57,7 +57,7 @@ const Contest = (props) => {
     }, []);
 
     const testRatings = (event) => {
-        const contest_id = params.id;
+        const contest_id = params.contest_id;
         fetch(`/api/contests/${contest_id}/grade`, {
             method: "POST",
             headers: { "Authorization": "Bearer " + sessionStorage.getItem("auth_token") }

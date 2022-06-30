@@ -148,7 +148,8 @@ router.get("/:contest_id/standings", async(req, res) => {
         const participants = participant_query.rows;
 
         for (const participant of participants) {
-            const submission_query = await pool.query("SELECT submission_time, verdict FROM submissions WHERE participant_id = $1 ORDER BY problem_id",
+            const submission_query = await pool.query(`SELECT problem_id, submission_time, verdict FROM submissions WHERE participant_id = $1 
+            ORDER BY problem_id`,
             [participant.id]);
             participant.submissions = submission_query.rows;
         }

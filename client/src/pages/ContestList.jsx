@@ -156,12 +156,12 @@ const ContestList = (props) => {
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "15%" }}>
                                                         {contest.authors.map((author) => (
-                                                            <Username key={author.username} user={author} />
+                                                            <Username key={author.username} rating={author.rating}>{author.username}</Username>
                                                         ))}
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "20%" }}>
                                                         <Typography>{format(contest.start_time, "MMM/dd/yyyy")}</Typography>
-                                                        <Typography>{format(contest.start_time, "hh:mm OOOO")}</Typography>
+                                                        <Typography>{format(contest.start_time, "HH:mm OOOO")}</Typography>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "10%" }}>
                                                         <Typography>
@@ -207,12 +207,12 @@ const ContestList = (props) => {
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "15%" }}>
                                                         {contest.authors.map((author) => (
-                                                            <Username key={author.username} user={author} />
+                                                            <Username key={author.username} rating={author.rating}>{author.username}</Username>
                                                         ))}
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "20%" }}>
                                                         <Typography>{format(contest.start_time, "MMM/dd/yyyy")}</Typography>
-                                                        <Typography>{format(contest.start_time, "hh:mm OOOO")}</Typography>
+                                                        <Typography>{format(contest.start_time, "HH:mm OOOO")}</Typography>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "10%" }}>
                                                         <Typography>
@@ -271,12 +271,12 @@ const ContestList = (props) => {
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "15%" }}>
                                                         {contest.authors.map((author) => (
-                                                            <Username key={author.username} user={author} />
+                                                            <Username key={author.username} rating={author.rating}>{author.username}</Username>
                                                         ))}
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "20%" }}>
                                                         <Typography>{format(contest.start_time, "MMM/dd/yyyy")}</Typography>
-                                                        <Typography>{format(contest.start_time, "hh:mm OOOO")}</Typography>
+                                                        <Typography>{format(contest.start_time, "HH:mm OOOO")}</Typography>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "10%" }}>
                                                         <Typography>

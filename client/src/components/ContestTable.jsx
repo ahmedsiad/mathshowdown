@@ -17,11 +17,10 @@ const ContestTable = (props) => {
     for (const sub of props.submissions) {
         submissions[sub.problem_id] = sub;
     }
-    console.log(submissions);
 
     return (
         <div>
-            <Table>
+            <Table size="small">
                 <TableHead>
                     <TableRow>
                         <TableCell align="center" sx={{ fontWeight: "bold" }}>#</TableCell>
