@@ -12,7 +12,8 @@ router.get("/profile/:username", async(req, res) => {
         }
 
         const user = user_query.rows[0];
-        const history = await pool.query("SELECT * FROM participants WHERE user_id = $1", [user.id]);
+        const history = await pool.query(`SELECT * FROM participants p INNER JOIN contests c ON c.id = p.contest_id
+        WHERE p.user_id = $1 AND c.graded = TRUE ORDER BY c.start_time`, [user.id]);
 
         user.contest_history = history.rows;
 

@@ -13,6 +13,7 @@ import ContestList from "./pages/ContestList";
 import ContestStandings from "./pages/ContestStandings";
 import Problem from "./pages/Problem";
 import Create from "./pages/Create";
+import Profile from "./pages/Profile";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -77,6 +78,7 @@ function App() {
               <Route path="/contest/:contest_id/standings" element={<ContestStandings />} />
               <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
               <Route path="/create/" element={<Create />} />
+              <Route path="/profile/:username" element={<Profile />} />
             </Routes>
         </BrowserRouter>
       }
