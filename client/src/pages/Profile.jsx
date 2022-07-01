@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import RatingText from "../components/RatingText";
+import RatingChart from "../components/RatingChart";
 import getRank from "../utils/Ranks";
 
 const Profile = (props) => {
@@ -72,6 +73,10 @@ const Profile = (props) => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography>Registered: {formatDistance(user.registration_date, Date.now(), { addSuffix: true })}</Typography>
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <RatingChart user={user} />
                                 </Grid>
                             </Grid>
                         </Paper>
