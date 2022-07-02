@@ -13,6 +13,7 @@ import {
 import { Line } from "react-chartjs-2";
 import annotationPlugin from "chartjs-plugin-annotation";
 import "chartjs-adapter-date-fns";
+import getRank from "../utils/Ranks";
 
 ChartJS.register(
     CategoryScale,
@@ -32,13 +33,25 @@ const options = {
         legend: {
             position: 'top',
         },
-        title: {
-            display: true,
-            text: 'Rating',
-        },
         chartAreaBorder: {
             borderColor: "black",
             borderWidth: 2
+        },
+        tooltip: {
+            displayColors: false,
+            callbacks: {
+                label: (context) => {
+                    let delta = context.raw - context.dataset.rating_before[context.dataIndex];
+                    delta = (delta >= 0) ? "+" + delta.toString() : delta;
+                    return `= ${context.raw} (${delta}), ${getRank(context.raw).toLowerCase()}`;
+                },
+                afterLabel: (context) => {
+                    return `Rank: ${context.dataset.ranks[context.dataIndex]}`;
+                },
+                footer: (context) => {
+                    return context[0].dataset.contest_titles[context[0].dataIndex];
+                }
+            }
         },
         annotation: {
             annotations: {
@@ -106,13 +119,10 @@ const options = {
             }
         },
         y: {
-            title: {
-                display: true,
-                text: "Rating Score"
-            },
             suggestedMin: 1000,
             suggestedMax: 2000,
             ticks: {
+                stepSize: 100,
                 callback: val => ([1200, 1500, 1800, 2000, 2200].includes(val)) ? val : null
             }
         }
@@ -135,15 +145,18 @@ const RatingChart = (props) => {
     const chartData = {
         labels: props.user.contest_history.map((c) => c.start_time),
         datasets: [{
-            label: "Rating",
+            label: props.user.username,
             data: props.user.contest_history.map((c) => c.rating_after),
+            contest_titles: props.user.contest_history.map((c) => c.title),
+            ranks: props.user.contest_history.map((c) => c.rank),
+            rating_before: props.user.contest_history.map((c) => c.rating_before),
             borderWidth: 3,
-            borderColor: "rgb(237, 194, 64)",
+            borderColor: "rgb(30, 30, 30)",
             backgroundColor: "white",
             pointStyle: "circle",
             pointRadius: 5,
-            pointBackgroundColor: "rgb(255, 255, 255)",
-            pointBorderColor: "rgb(237, 194, 64)",
+            pointBackgroundColor: "white",
+            pointBorderColor: "rgb(30, 30, 30)",
 
         }]
     };
