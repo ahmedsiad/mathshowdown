@@ -111,7 +111,11 @@ router.get("/contests/:contest_id/submissions", authorized, async(req, res) => {
 
 router.get("/", async(req, res) => {
     try {
-        const users_query = await pool.query("SELECT id, username, rating, registration_date FROM users");
+        const page = (req.query.page) ? req.query.page : 0;
+        const limit = (req.query.limit) ? req.query.limit : 100;
+
+        const users_query = await pool.query("SELECT username, rating, registration_date FROM users ORDER BY rating DESC OFFSET $1 FETCH NEXT $2 ROWS ONLY",
+        [page * limit, limit]);
         
         return res.status(200).json({ success: true, users: users_query.rows});
     } catch (err) {

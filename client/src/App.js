@@ -15,6 +15,7 @@ import Problem from "./pages/Problem";
 import Create from "./pages/Create";
 import Profile from "./pages/Profile";
 import UserContests from "./pages/UserContests";
+import Leaderboard from "./pages/Leaderboard";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -81,6 +82,7 @@ function App() {
               <Route path="/create/" element={<Create />} />
               <Route path="/profile/:username" element={<Profile />} />
               <Route path="/profile/:username/contests" element={<UserContests />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
             </Routes>
         </BrowserRouter>
       }
