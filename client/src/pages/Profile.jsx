@@ -38,7 +38,6 @@ const Profile = (props) => {
             } else {
                 window.location = "/";
             }
-            console.log(res);
         })
     }, []);
 

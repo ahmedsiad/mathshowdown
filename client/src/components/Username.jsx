@@ -10,13 +10,11 @@ const Username = (props) => {
     const user_color = Colors[user_rank];
 
     return (
-        <div>
-            <Link to={`/profile/${props.children}`} title={`${user_rank} ${props.children}`}>
-                <Typography sx={{ color: user_color, fontWeight: "bold" }}>
-                    <RatingText rating={props.rating}>{props.children}</RatingText>
-                </Typography>
-            </Link>
-        </div>
+        <Link to={`/profile/${props.children}`} title={`${user_rank} ${props.children}`} style={{ display: (props.display) ? props.display : "inline" }}>
+            <Typography sx={{ color: user_color, fontWeight: "bold" }} variant={(props.variant) ? props.variant : "body1"}>
+                <RatingText rating={props.rating}>{props.children}</RatingText>
+            </Typography>
+        </Link>
     );
 }
 
