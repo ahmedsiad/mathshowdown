@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { format, formatDistance } from "date-fns";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
@@ -34,7 +34,7 @@ const Profile = (props) => {
 
                 let maxRatingBefore = Math.max(...res.user.contest_history.map((p) => p.rating_before));
                 let maxRatingAfter = Math.max(...res.user.contest_history.map((p) => p.rating_after));
-                console.log(maxRatingBefore);
+
                 setMaxRating(Math.max(maxRatingBefore, maxRatingAfter));
             } else {
                 window.location = "/";
@@ -70,6 +70,11 @@ const Profile = (props) => {
                                         &nbsp;(max.&nbsp;
                                         <RatingText rating={maxRating}>{getRank(maxRating)}, {maxRating}</RatingText>)
                                     </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Link to={`${window.location.pathname}/contests`}>
+                                        <Typography>Contest History</Typography>
+                                    </Link>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography>Registered: {formatDistance(user.registration_date, Date.now(), { addSuffix: true })}</Typography>
