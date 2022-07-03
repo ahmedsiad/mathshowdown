@@ -112,18 +112,22 @@ const Leaderboard = (props) => {
                                 </Grid>
                             </Grid>
                         </Paper>
+                        <Pagination
+                            page={currentPage}
+                            showFirstButton
+                            showLastButton
+                            count={maxPage}
+                            onChange={handleChange}
+                            sx={{ marginTop: "10px" }}
+                            renderItem={(item) => (
+                                <PaginationItem component={Link} to={`/leaderboard${(item.page === 1 ? "" : `?page=${item.page - 1}`)}`} {...item} />
+                            )}
+                        />
                     </Grid>
                     <Grid item xs={3}>
                         <TopRated />
                     </Grid>
-
-                    <Grid item xs={2} />
-                    <Grid item xs={3}>
-                        <Pagination page={currentPage} count={maxPage} onChange={handleChange} renderItem={(item) => (
-                            <PaginationItem component={Link} to={`/leaderboard${(item.page === 1 ? "" : `?page=${item.page - 1}`)}`} {...item} />
-                        )}
-                        />
-                    </Grid>
+                    <Grid item xs={1} />
                 </Grid>
             }
         </div>

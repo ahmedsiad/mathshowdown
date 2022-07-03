@@ -84,6 +84,13 @@ const TopRated = (props) => {
                                 </TableBody>
                             </Table>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Link to={"/leaderboard"}>
+                                <Typography>
+                                    View leaderboards
+                                </Typography>
+                            </Link>
+                        </Grid>
                     </Grid>
                 </Paper>
             }

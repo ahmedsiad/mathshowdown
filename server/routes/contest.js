@@ -154,7 +154,9 @@ router.get("/:contest_id/standings", async(req, res) => {
             participant.submissions = submission_query.rows;
         }
 
-        return res.status(200).json({ success: true, participants: participants });
+        const count_query = await pool.query("SELECT COUNT(*) FROM participants WHERE contest_id = $1", [contest_id]);
+
+        return res.status(200).json({ success: true, participants: participants, count: count_query.rows[0].count });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
