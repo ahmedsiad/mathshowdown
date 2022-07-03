@@ -12,6 +12,8 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
 import TopRated from "../components/TopRated";
 import RatingText from "../components/RatingText";
 import Username from "../components/Username";
@@ -22,9 +24,13 @@ const Leaderboard = (props) => {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(10);
+
     useEffect(() => {
         let page = searchParams.get("page");
-        page = (page) ? page : 0;
+        page = (page) ? parseInt(page) : 0;
+        setCurrentPage(page + 1);
 
         fetch(`/api/users?page=${page}`, {
             method: "GET"
@@ -41,14 +47,18 @@ const Leaderboard = (props) => {
                     res.users[i].rank = curr_rank;
                 }
                 setUsers(res.users);
+                setMaxPage(Math.floor(res.count / 100) + 1);
                 setLoading(false);
             } else {
                 window.location = "/";
             }
-            console.log(res);
-        })
+        });
 
     }, [searchParams]);
+
+    const handleChange = (event, value) => {
+        setCurrentPage(value);
+    }
 
     return (
         <div>
@@ -105,6 +115,14 @@ const Leaderboard = (props) => {
                     </Grid>
                     <Grid item xs={3}>
                         <TopRated />
+                    </Grid>
+
+                    <Grid item xs={2} />
+                    <Grid item xs={3}>
+                        <Pagination page={currentPage} count={maxPage} onChange={handleChange} renderItem={(item) => (
+                            <PaginationItem component={Link} to={`/leaderboard${(item.page === 1 ? "" : `?page=${item.page - 1}`)}`} {...item} />
+                        )}
+                        />
                     </Grid>
                 </Grid>
             }

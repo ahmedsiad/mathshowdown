@@ -137,8 +137,10 @@ router.get("/", async(req, res) => {
 
         const users_query = await pool.query("SELECT username, rating, registration_date FROM users ORDER BY rating DESC OFFSET $1 FETCH NEXT $2 ROWS ONLY",
         [page * limit, limit]);
+
+        const count_query = await pool.query("SELECT COUNT(*) FROM users");
         
-        return res.status(200).json({ success: true, users: users_query.rows});
+        return res.status(200).json({ success: true, users: users_query.rows, count: count_query.rows[0].count});
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
