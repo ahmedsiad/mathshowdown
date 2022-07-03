@@ -14,7 +14,7 @@ import ContestStandings from "./pages/ContestStandings";
 import Problem from "./pages/Problem";
 import Create from "./pages/Create";
 import Profile from "./pages/Profile";
-import UserContests from "./pages/UserContests";
+import UserContestList from "./pages/UserContestList";
 import Leaderboard from "./pages/Leaderboard";
 
 function App() {
@@ -81,7 +81,8 @@ function App() {
               <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
               <Route path="/create/" element={<Create />} />
               <Route path="/profile/:username" element={<Profile />} />
-              <Route path="/profile/:username/contests" element={<UserContests />} />
+              <Route path="/profile/:username/contests" element={<UserContestList />} />
+              <Route path="/profile/:username/contest/:contest_id" element={<UserContest />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Routes>
         </BrowserRouter>

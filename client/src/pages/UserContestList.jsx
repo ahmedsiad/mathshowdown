@@ -17,7 +17,7 @@ import RatingText from "../components/RatingText";
 import Username from "../components/Username";
 import getRank from "../utils/Ranks";
 
-const UserContests = (props) => {
+const UserContestList = (props) => {
     const params = useParams();
 
     const [user, setUser] = useState({});
@@ -144,4 +144,4 @@ const UserContests = (props) => {
     );
 }
 
-export default UserContests;
+export default UserContestList;
