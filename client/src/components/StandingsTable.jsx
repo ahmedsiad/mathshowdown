@@ -6,12 +6,12 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import Username from "../components/Username";
 import RatingText from "../components/RatingText";
 import getRank from "../utils/Ranks";
+import formatMinutes from "../utils/FormatTime";
 
 const StandingsTable = (props) => {
     return (
@@ -58,7 +58,7 @@ const StandingsTable = (props) => {
                                     {submission && submission.verdict &&
                                         <Fragment>
                                             <CheckIcon sx={{ color: "green" }} /> <br></br>
-                                            {new Date(submission.submission_time - props.contest.start_time).toISOString().substring(11, 16)}
+                                            {formatMinutes(submission.submission_time - props.contest.start_time)}
                                         </Fragment>
                                     }
                                     {submission && !submission.verdict &&

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useSearchParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import format from "date-fns/format";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
@@ -101,7 +101,9 @@ const UserContestList = (props) => {
                                                         {contest.rank}
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "5%" }}>
-                                                        {contest.solved}
+                                                        <Link to={`/profile/${user.username}/contest/${contest.id}`}>
+                                                            {contest.solved}
+                                                        </Link>
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "5%" }}>
                                                         {contest.rating_after - contest.rating_before >= 0 &&

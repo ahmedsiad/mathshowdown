@@ -48,18 +48,39 @@ router.get("/profile/", authorized, async(req, res) => {
     }
 });
 
-router.get("/profile/:username/submissions", async(req, res) => {
+router.get("/profile/:username/contests/:contest_id/submissions", async(req, res) => {
     try {
-        const { username } = req.params;
+        const { username, contest_id } = req.params;
 
-        const user_query = await pool.query("SELECT id FROM users WHERE username = $1", [username]);
+        const user_query = await pool.query("SELECT id, username, rating FROM users WHERE username = $1", [username]);
         if (user_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "User does not exist" });
         }
-        
-        const submissions_query = await pool.query("SELECT * FROM submissions WHERE user_id = $1", [user_query.rows[0].id]);
+        const user = user_query.rows[0];
 
-        return res.status(200).json({ success: true, submissions: submissions_query.rows });
+        const contest_query = await pool.query("SELECT * FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Contest does not exist" });
+        }
+        if (!contest_query.rows[0].graded) {
+            return res.status(404).json({ success: false, message: "Contest has not been graded" });
+        }
+        const contest = contest_query.rows[0];
+
+        const participant_query = await pool.query("SELECT id FROM participants WHERE user_id = $1 AND contest_id = $2", [user.id, contest.id]);
+        if (participant_query.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "User is not registered for this contest" });
+        }
+        const participant = participant_query.rows[0];
+
+        const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1", [contest.id]);
+        const problem_ids = problem_query.rows.map((p) => p.id);
+
+        const submissions_query = await pool.query(`SELECT s.*, p.title, p.problem_index FROM submissions s INNER JOIN problems p
+        ON p.id = s.problem_id WHERE s.participant_id = $1 AND s.problem_id = ANY ($2)`,
+        [participant.id, problem_ids]);
+
+        return res.status(200).json({ success: true, user: user, contest: contest, submissions: submissions_query.rows });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });

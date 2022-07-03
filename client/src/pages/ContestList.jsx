@@ -20,6 +20,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CircularProgress from "@mui/material/CircularProgress";
 import Username from "../components/Username";
 import Countdown from "../components/Countdown";
+import formatMinutes from "../utils/FormatTime";
 
 const ContestList = (props) => {
     const [loading, setLoading] = useState(true);
@@ -165,7 +166,7 @@ const ContestList = (props) => {
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "10%" }}>
                                                         <Typography>
-                                                            {new Date(contest.end_time - contest.start_time).toISOString().substring(11, 19)}
+                                                            {formatMinutes(contest.end_time - contest.start_time)}
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell align="center">
@@ -216,7 +217,7 @@ const ContestList = (props) => {
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "10%" }}>
                                                         <Typography>
-                                                            {new Date(contest.end_time - contest.start_time).toISOString().substring(11, 19)}
+                                                            {formatMinutes(contest.end_time - contest.start_time)}
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell align="center">
@@ -280,7 +281,7 @@ const ContestList = (props) => {
                                                     </TableCell>
                                                     <TableCell align="center" sx={{ width: "10%" }}>
                                                         <Typography>
-                                                            {new Date(contest.end_time - contest.start_time).toISOString().substring(11, 19)}
+                                                            {formatMinutes(contest.end_time - contest.start_time)}
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell align="center">

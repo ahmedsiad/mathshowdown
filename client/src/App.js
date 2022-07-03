@@ -14,6 +14,7 @@ import ContestStandings from "./pages/ContestStandings";
 import Problem from "./pages/Problem";
 import Create from "./pages/Create";
 import Profile from "./pages/Profile";
+import UserContest from "./pages/UserContest";
 import UserContestList from "./pages/UserContestList";
 import Leaderboard from "./pages/Leaderboard";
 
