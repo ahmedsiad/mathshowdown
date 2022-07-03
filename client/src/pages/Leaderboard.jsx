@@ -12,6 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import TopRated from "../components/TopRated";
 import RatingText from "../components/RatingText";
 import Username from "../components/Username";
 
@@ -47,7 +48,7 @@ const Leaderboard = (props) => {
             console.log(res);
         })
 
-    }, []);
+    }, [searchParams]);
 
     return (
         <div>
@@ -101,6 +102,9 @@ const Leaderboard = (props) => {
                                 </Grid>
                             </Grid>
                         </Paper>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <TopRated />
                     </Grid>
                 </Grid>
             }

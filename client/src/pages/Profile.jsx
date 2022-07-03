@@ -7,6 +7,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
+import TopRated from "../components/TopRated";
 import RatingText from "../components/RatingText";
 import RatingChart from "../components/RatingChart";
 import getRank from "../utils/Ranks";
@@ -39,7 +40,7 @@ const Profile = (props) => {
                 window.location = "/";
             }
         })
-    }, []);
+    }, [params]);
 
     return (
         <div>
@@ -79,6 +80,10 @@ const Profile = (props) => {
                                 </Grid>
                             </Grid>
                         </Paper>
+                    </Grid>
+
+                    <Grid item xs={3}>
+                        <TopRated />
                     </Grid>
                 </Grid>
             }

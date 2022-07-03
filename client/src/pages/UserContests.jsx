@@ -12,6 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import TopRated from "../components/TopRated";
 import RatingText from "../components/RatingText";
 import Username from "../components/Username";
 import getRank from "../utils/Ranks";
@@ -39,7 +40,7 @@ const UserContests = (props) => {
                 window.location = "/";
             }
         })
-    }, []);
+    }, [params]);
 
     return (
         <div>
@@ -132,6 +133,10 @@ const UserContests = (props) => {
                                 </Grid>
                             </Grid>
                         </Paper>
+                    </Grid>
+
+                    <Grid item xs={3}>
+                        <TopRated />
                     </Grid>
                 </Grid>
             }

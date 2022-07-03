@@ -53,7 +53,7 @@ const ContestStandings = (props) => {
             }
             console.log(res3);
         });
-    }, [params.contest_id, searchParams]);
+    }, [params, searchParams]);
 
 
     return (
