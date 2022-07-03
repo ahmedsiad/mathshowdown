@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -36,7 +36,6 @@ const Contest = (props) => {
             return Promise.all([res1.json(), res2.json(), res3.json(), res4.json()]);
         }).then(([res1, res2, res3, res4]) => {
             if (res1.success && res2.success && res3.success) {
-                console.log(res1, res2);
                 setContest(res1.contest);
                 setContestGraded(res1.contest.graded);
                 setProblems(res2.problems);
@@ -51,12 +50,10 @@ const Contest = (props) => {
                 setSubmissions(res4.submissions);
                 setParticipating(true);
             }
-
-            console.log(res3, res4);
         });
     }, []);
 
-    const testRatings = (event) => {
+    const gradeContest = (event) => {
         const contest_id = params.contest_id;
         fetch(`/api/contests/${contest_id}/grade`, {
             method: "POST",
@@ -64,7 +61,9 @@ const Contest = (props) => {
         }).then((response) => {
             return response.json();
         }).then((res) => {
-            console.log(res);
+            if (res.success) {
+                setContest({ ...contest, graded: true });
+            }
         });
     }
 
@@ -107,7 +106,14 @@ const Contest = (props) => {
                                 <Grid item xs={12}>
                                     <Typography variant="body1" sx={{ fontWeight: "lighter" }}>Time Remaining:</Typography>
                                     <Countdown timestamp={contest.end_time} variant="h6" />
-                                    <Button onClick={testRatings}>Test</Button>
+                                    {contest.graded &&
+                                        <Link to={`/contest/${contest.id}/standings`}>
+                                            <Typography variant="h6" sx={{ marginTop: "5px" }}>Final Standings</Typography>
+                                        </Link>
+                                    }
+                                    {!contest.graded && props.isAdmin &&
+                                        <Button variant="outlined" onClick={gradeContest}>Grade Contest</Button>
+                                    }
                                 </Grid>
                             </Grid>
                         </Paper>

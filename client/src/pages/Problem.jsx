@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import Countdown from "../components/Countdown";
@@ -47,6 +48,7 @@ const Problem = (props) => {
                 setContest(res1.contest);
                 setProblem(res2.problem);
                 setLoading(false);
+                console.log(res2);
             } else {
                 window.location = "/";
             }
@@ -191,9 +193,31 @@ const Problem = (props) => {
                                 <Grid item xs={12}>
                                     <Typography variant="body1" sx={{ fontWeight: "lighter" }}>Time Remaining:</Typography>
                                     <Countdown timestamp={contest.end_time} variant="h6" />
+                                    {contest.graded &&
+                                        <Link to={`/contest/${contest.id}/standings`}>
+                                            <Typography variant="h6" sx={{ marginTop: "5px" }}>Final Standings</Typography>
+                                        </Link>
+                                    }
                                 </Grid>
                             </Grid>
                         </Paper>
+                        {contest.graded && problem.tags.length > 0 &&
+                            <Paper square sx={{ padding: "12px", marginTop: "10px" }} elevation={3}>
+                                <Grid container spacing={1} sx={{ width: "100%", margin: 0 }}>
+                                    <Grid item xs={12} sx={{ textAlign: "center" }}>
+                                        <Typography variant="h6">Problem Tags</Typography>
+                                    </Grid>
+                                    <Divider sx={{ width: "100%" }} />
+                                    <Grid item xs={12}>
+                                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                            {problem.tags.map((tag, index) => (
+                                                <Chip key={index} label={tag.tag} size="small" />
+                                            ))}
+                                        </Box>
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        }
                     </Grid>
                 </Grid>
             }

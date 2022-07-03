@@ -4,11 +4,11 @@ const authorized = require("../middleware/authorization");
 const { ContestValidator, SubmissionValidator } = require("../middleware/validators");
 const calculateRatingChanges = require("../utils/ratingChanges");
 
-router.get("/:id", async(req, res) => {
+router.get("/:contest_id", async(req, res) => {
     try {
-        const { id } = req.params;
+        const { contest_id } = req.params;
 
-        const contest_query = await pool.query("SELECT * FROM contests WHERE id = $1", [id]);
+        const contest_query = await pool.query("SELECT * FROM contests WHERE id = $1", [contest_id]);
         if (contest_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "Contest does not exist" });
         }
@@ -20,11 +20,11 @@ router.get("/:id", async(req, res) => {
     }
 });
 
-router.get("/:id/problems", async(req, res) => {
+router.get("/:contest_id/problems", async(req, res) => {
     try {
-        const { id } = req.params;
+        const { contest_id } = req.params;
 
-        const problem_query = await pool.query("SELECT * FROM problems WHERE contest_id = $1", [id]);
+        const problem_query = await pool.query("SELECT id, title, problem_index FROM problems WHERE contest_id = $1", [contest_id]);
         if (problem_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "Contest does not exist" });
         }
@@ -41,7 +41,7 @@ router.get("/:contest_id/problems/:problem_index", async(req, res) => {
         const { contest_id, problem_index } = req.params;
         const now = Date.now();
 
-        const contest_query = await pool.query("SELECT start_time, end_time FROM contests WHERE id = $1", [contest_id]);
+        const contest_query = await pool.query("SELECT start_time, graded FROM contests WHERE id = $1", [contest_id]);
         if (contest_query.rows.length === 0) {
             return res.status(404).json({ success: false, message: "Contest does not exist" });
         }
@@ -56,9 +56,13 @@ router.get("/:contest_id/problems/:problem_index", async(req, res) => {
             return res.status(404).json({ success: false, message: "Problem does not exist" });
         }
         const problem = problem_query.rows[0];
+        problem.answer = null;
+        problem.tags = [];
 
-        if (now < contest.end_time) {
-            problem.answer = null;
+        if (contest.graded) {
+            const tags_query = await pool.query("SELECT t.tag FROM tags t INNER JOIN problem_tags p ON t.id = p.problem_id WHERE p.problem_id = $1",
+            [problem.id]);
+            problem.tags = tags_query.rows;
         }
 
         return res.status(200).json({ success: true, problem: problem });

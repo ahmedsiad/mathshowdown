@@ -77,7 +77,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/contests" element={<ContestList authorized={authenticated} />} />
-              <Route path="/contest/:contest_id" element={<Contest />} />
+              <Route path="/contest/:contest_id" element={<Contest isAdmin={isAdmin} />} />
               <Route path="/contest/:contest_id/standings" element={<ContestStandings />} />
               <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
               <Route path="/create/" element={<Create />} />
