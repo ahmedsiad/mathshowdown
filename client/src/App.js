@@ -70,7 +70,7 @@ function App() {
             }
             {authenticated &&
             <Typography>
-              <Link to={`/profile/${user.username}`} style={{padding: "20px"}}><RatingText>{user.username}</RatingText></Link>
+              <Link to={`/profile/${user.username}`} style={{padding: "20px"}}><RatingText rating={user.rating}>{user.username}</RatingText></Link>
               <Link to={`/logout`} style={{padding: "20px"}}>Logout</Link>
             </Typography>
             }

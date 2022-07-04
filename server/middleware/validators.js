@@ -29,7 +29,7 @@ const ContestValidator = async(req, res, next) => {
         if (typeof division !== "number" || division !== 1 && division !== 2) {
             return res.status(400).json({ success: false, message: "Invalid Division" });
         }
-        if (startTime < Date.now) {
+        if (startTime < Date.now()) {
             return res.status(400).json({ success: false, message: "Invalid Start Time" });
         }
         if (endTime <= startTime) {
