@@ -61,9 +61,9 @@ router.post("/verify", authorized, async(req, res) => {
     try {
         const user_id = req.user;
 
-        const user_query = await pool.query("SELECT is_admin FROM users WHERE id = $1", [user_id]);
+        const user_query = await pool.query("SELECT username, rating, is_admin FROM users WHERE id = $1", [user_id]);
 
-        return res.status(200).json({ success: true, authorized: true, is_admin: user_query.rows[0].is_admin });
+        return res.status(200).json({ success: true, authorized: true, user: user_query.rows[0] });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });

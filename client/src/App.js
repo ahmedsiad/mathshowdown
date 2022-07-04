@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom"; 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import Login from "./pages/Login";
@@ -17,10 +18,11 @@ import Profile from "./pages/Profile";
 import UserContest from "./pages/UserContest";
 import UserContestList from "./pages/UserContestList";
 import Leaderboard from "./pages/Leaderboard";
+import RatingText from "./components/RatingText";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState({ username: "", rating: 0, is_admin: false});
   const [loading, setLoading] = useState(true);
 
   const checkAuthentication = () => {
@@ -32,7 +34,7 @@ function App() {
     }).then((res) => {
       if (res.success) {
         setAuthenticated(true);
-        setIsAdmin(res.is_admin);
+        setUser(res.user);
       } else {
         setAuthenticated(false);
       }
@@ -50,19 +52,30 @@ function App() {
   }, []);
 
   return (
+    <BrowserRouter>
     <div className="App">
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" sx={{ bgcolor: "white", color: "black", }} elevation={0}>
           <Toolbar>
-            <Button>Home</Button>
-            <Button>Contests</Button>
-            <Button>Leaderboards</Button>
-            <Button sx={{flexGrow: 1}}>Blog</Button>
-
-            <Button href="/login">Login</Button>
-            <Button href="/register">Register</Button>
+            <Typography sx={{marginLeft: "100px", flexGrow: 1}}>
+              <Link to={"/"} style={{padding: "50px"}} >HOME</Link>
+              <Link to={"/contests"} style={{padding: "50px"}}>CONTESTS</Link>
+              <Link to={"/leaderboard"} style={{padding: "50px"}}>LEADERBOARD</Link>
+            </Typography>
+            {!authenticated &&
+              <Typography>
+                <Link to={"/login"} style={{padding: "20px"}}>Login</Link>
+                <Link to={"/register"} style={{padding: "20px"}}>Register</Link>
+              </Typography>
+            }
+            {authenticated &&
+            <Typography>
+              <Link to={`/profile/${user.username}`} style={{padding: "20px"}}><RatingText>{user.username}</RatingText></Link>
+              <Link to={`/logout`} style={{padding: "20px"}}>Logout</Link>
+            </Typography>
+            }
           </Toolbar>
-          <Divider></Divider>
+          <Divider />
         </AppBar>
         <Toolbar />
       </Box>
@@ -72,12 +85,11 @@ function App() {
         </Box>
       }
       {!loading &&
-        <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/contests" element={<ContestList authorized={authenticated} />} />
-              <Route path="/contest/:contest_id" element={<Contest isAdmin={isAdmin} />} />
+              <Route path="/contest/:contest_id" element={<Contest isAdmin={user.is_admin} />} />
               <Route path="/contest/:contest_id/standings" element={<ContestStandings />} />
               <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
               <Route path="/create/" element={<Create />} />
@@ -86,9 +98,9 @@ function App() {
               <Route path="/profile/:username/contest/:contest_id" element={<UserContest />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Routes>
-        </BrowserRouter>
-      }
+      } 
     </div>
+    </BrowserRouter>
   );
 }
 
