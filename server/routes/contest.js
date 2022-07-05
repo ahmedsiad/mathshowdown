@@ -167,19 +167,6 @@ router.get("/:contest_id/standings", async(req, res) => {
     }
 });
 
-router.get("/:id/users", async(req, res) => {
-    try {
-        const { id } = req.params;
-
-        const user_query = await pool.query("SELECT * FROM participants WHERE contest_id = $1", [id]);
-        
-        return res.status(200).json({ success: true, users: user_query.rows });
-    } catch(err) {
-        console.error(err.message);
-        return res.status(500).json({ success: false, message: "Server Error" });
-    }
-});
-
 router.get("/", async(req, res) => {
     try {
         const contest_query = await pool.query("SELECT * FROM contests");
