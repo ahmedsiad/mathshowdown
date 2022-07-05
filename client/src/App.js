@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom"; 
+import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom"; 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -43,12 +42,12 @@ function App() {
   }
 
   useEffect(() => {
-    console.log("hi");
     const potential_token = localStorage.getItem("auth_token");
     if (!!potential_token) {
       sessionStorage.setItem("auth_token", potential_token);
     }
     checkAuthentication();
+    console.log(potential_token);
   }, []);
 
   return (
@@ -58,9 +57,12 @@ function App() {
         <AppBar position="static" sx={{ bgcolor: "white", color: "black", }} elevation={0}>
           <Toolbar>
             <Typography sx={{marginLeft: "100px", flexGrow: 1}}>
-              <Link to={"/"} style={{padding: "50px"}} >HOME</Link>
-              <Link to={"/contests"} style={{padding: "50px"}}>CONTESTS</Link>
-              <Link to={"/leaderboard"} style={{padding: "50px"}}>LEADERBOARD</Link>
+              <Link to={"/"} style={{padding: "50px"}} >Home</Link>
+              <Link to={"/contests"} style={{padding: "50px"}}>Contests</Link>
+              <Link to={"/leaderboard"} style={{padding: "50px"}}>Leaderboard</Link>
+              {user.is_admin &&
+                <Link to={"/create"} style={{padding: "50px"}}>Create</Link>
+              }
             </Typography>
             {!authenticated &&
               <Typography>
@@ -92,7 +94,7 @@ function App() {
               <Route path="/contest/:contest_id" element={<Contest isAdmin={user.is_admin} />} />
               <Route path="/contest/:contest_id/standings" element={<ContestStandings />} />
               <Route path="/contest/:contest_id/problem/:problem_index" element={<Problem />} />
-              <Route path="/create/" element={<Create />} />
+              <Route path="/create/" element={(user.is_admin) ? <Create isAdmin={user.is_admin} /> : <Navigate to="/" replace />} />
               <Route path="/profile/:username" element={<Profile />} />
               <Route path="/profile/:username/contests" element={<UserContestList />} />
               <Route path="/profile/:username/contest/:contest_id" element={<UserContest />} />
