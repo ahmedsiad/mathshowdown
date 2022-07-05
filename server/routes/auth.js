@@ -57,6 +57,20 @@ router.post("/login", async(req, res) => {
     }
 });
 
+router.post("/logout", authorized, async(req, res) => {
+    try {
+        const user_id = req.user;
+        const jwtToken = req.headers.authorization.split(' ')[1];
+
+        const token_query = await pool.query("INSERT INTO btokens (token) VALUES ($1) RETURNING *", [jwtToken]);
+
+        return res.status(201).json({ success: true, message: "Logged out successfully" });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+});
+
 router.post("/verify", authorized, async(req, res) => {
     try {
         const user_id = req.user;

@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 import Register from "./pages/Register";
 import Contest from "./pages/Contest";
 import ContestList from "./pages/ContestList";
@@ -91,6 +92,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={(authenticated) ? <Logout /> : <Navigate to="/" replace />} />
               <Route path="/register" element={<Register />} />
               <Route path="/contests" element={<ContestList authorized={authenticated} />} />
               <Route path="/contest/:contest_id" element={<Contest isAdmin={user.is_admin} />} />

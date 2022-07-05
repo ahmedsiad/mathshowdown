@@ -10,6 +10,11 @@ CREATE TABLE users (
     is_admin boolean NOT NULL default False
 );
 
+CREATE TABLE btokens (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR(256)
+);
+
 CREATE TABLE contests (
     id SERIAL PRIMARY KEY,
     title VARCHAR(64),
