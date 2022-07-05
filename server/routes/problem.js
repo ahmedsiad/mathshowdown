@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const pool = require("../config/db");
 
-router.get("/", async(req, res) => {
+// TODO: Future problems page + routes
+/*router.get("/", async(req, res) => {
     try {
         const problem_query = await pool.query("SELECT * FROM problems");
 
@@ -10,6 +11,6 @@ router.get("/", async(req, res) => {
         console.error(err.message);
         return res.status(500).json({ success: false, message: "Server Error" });
     }
-});
+});*/
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const pool = require("../config/db");
-const authorized = require("../middleware/authorization");
+const { Authorized, AdminAuthorized } = require("../middleware/authorization");
 const { ContestValidator, SubmissionValidator } = require("../middleware/validators");
 const calculateRatingChanges = require("../utils/ratingChanges");
 
@@ -48,7 +48,7 @@ router.get("/:contest_id/problems/:problem_index", async(req, res) => {
         const contest = contest_query.rows[0];
 
         if (now < contest.start_time) {
-            return res.status(403).json({ success: false, message: "This contest hasn't started!" });
+            return res.status(403).json({ success: false, message: "Contest has not started yet" });
         }
 
         const problem_query = await pool.query("SELECT * FROM problems WHERE contest_id = $1 AND problem_index = $2", [contest_id, problem_index]);
@@ -72,7 +72,7 @@ router.get("/:contest_id/problems/:problem_index", async(req, res) => {
     }
 });
 
-router.get("/:contest_id/problems/:problem_index/submissions", authorized, async(req, res) => {
+router.get("/:contest_id/problems/:problem_index/submissions", Authorized, async(req, res) => {
     try {
         const { contest_id, problem_index} = req.params;
         const user_id = req.user;
@@ -185,7 +185,7 @@ router.get("/", async(req, res) => {
     }
 });
 
-router.post("/", authorized, ContestValidator, async(req, res) => {
+router.post("/", Authorized, AdminAuthorized, ContestValidator, async(req, res) => {
     try {
         const { title, division, startTime, endTime, authors, problems } = req.body;
 
@@ -215,10 +215,18 @@ router.post("/", authorized, ContestValidator, async(req, res) => {
     }
 });
 
-router.post("/:contest_id/register", authorized, async(req, res) => {
+router.post("/:contest_id/register", Authorized, async(req, res) => {
     try {
         const user_id = req.user;
         const { contest_id } = req.params;
+
+        const contest_query = await pool.query("SELECT start_time FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(400).json({ success: false, message: "Contest doesn't exist" });
+        }
+        if (Date.now() >= contest_query.rows[0].start_time) {
+            return res.status(400).json({ success: false, message: "Contest has already started" });
+        }
 
         const participant_query = await pool.query("SELECT * FROM participants WHERE user_id = $1 AND contest_id = $2", [user_id, contest_id]);
         if (participant_query.rows.length > 0) {
@@ -238,7 +246,7 @@ router.post("/:contest_id/register", authorized, async(req, res) => {
     }
 });
 
-router.post("/:contest_id/grade", authorized, async(req, res) => {
+router.post("/:contest_id/grade", Authorized, AdminAuthorized, async(req, res) => {
     try {
         const { contest_id } = req.params;
 
@@ -265,11 +273,24 @@ router.post("/:contest_id/grade", authorized, async(req, res) => {
     }
 });
 
-router.post("/:contest_id/problems/:problem_index/submissions", authorized, SubmissionValidator, async(req, res) => {
+router.post("/:contest_id/problems/:problem_index/submissions", Authorized, SubmissionValidator, async(req, res) => {
     try {
         const { contest_id, problem_index } = req.params;
         const { answer } = req.body;
         const user_id = req.user;
+
+        const contest_query = await pool.query("SELECT start_time, end_time FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(400).json({ success: false, message: "Contest doesn't exist" });
+        }
+        const contest = contest_query.rows[0];
+
+        if (Date.now() < contest.start_time) {
+            return res.status(400).json({ success: false, message: "Contest has not yet started" });
+        }
+        if (Date.now() >= contest.end_time) {
+            return res.status(400).json({ success: false, messsage: "Contest has already finished" });
+        }
 
         const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1 AND problem_index = $2", [contest_id, problem_index]);
         if (problem_query.rows.length === 0) {
@@ -298,10 +319,23 @@ router.post("/:contest_id/problems/:problem_index/submissions", authorized, Subm
     }
 });
 
-router.delete("/:contest_id/problems/:problem_index/submissions", authorized, async(req, res) => {
+router.delete("/:contest_id/problems/:problem_index/submissions", Authorized, async(req, res) => {
     try {
         const { contest_id, problem_index } = req.params;
         const user_id = req.user;
+
+        const contest_query = await pool.query("SELECT start_time, end_time FROM contests WHERE id = $1", [contest_id]);
+        if (contest_query.rows.length === 0) {
+            return res.status(400).json({ success: false, message: "Contest doesn't exist" });
+        }
+        const contest = contest_query.rows[0];
+
+        if (Date.now() < contest.start_time) {
+            return res.status(400).json({ success: false, message: "Contest has not yet started" });
+        }
+        if (Date.now() >= contest.end_time) {
+            return res.status(400).json({ success: false, messsage: "Contest has already finished" });
+        }
 
         const problem_query = await pool.query("SELECT id FROM problems WHERE contest_id = $1 AND problem_index = $2", [contest_id, problem_index]);
         if (problem_query.rows.length === 0) {

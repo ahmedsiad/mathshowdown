@@ -2,7 +2,7 @@ const router = require("express").Router();
 const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
-const authorized = require("../middleware/authorization");
+const { Authorized } = require("../middleware/authorization");
 const { RegisterValidator } = require("../middleware/validators");
 
 router.post("/register", RegisterValidator, async(req, res) => {
@@ -57,7 +57,7 @@ router.post("/login", async(req, res) => {
     }
 });
 
-router.post("/logout", authorized, async(req, res) => {
+router.post("/logout", Authorized, async(req, res) => {
     try {
         const user_id = req.user;
         const jwtToken = req.headers.authorization.split(' ')[1];
@@ -71,7 +71,7 @@ router.post("/logout", authorized, async(req, res) => {
     }
 });
 
-router.post("/verify", authorized, async(req, res) => {
+router.post("/verify", Authorized, async(req, res) => {
     try {
         const user_id = req.user;
 

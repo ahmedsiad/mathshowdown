@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const pool = require("../config/db");
-const authorized = require("../middleware/authorization");
+const { Authorized } = require("../middleware/authorization");
 
 router.get("/profile/:username", async(req, res) => {
     try {
@@ -26,7 +26,7 @@ router.get("/profile/:username", async(req, res) => {
 });
 
 // get user via auth token
-router.get("/profile/", authorized, async(req, res) => {
+router.get("/profile/", Authorized, async(req, res) => {
     try {
         const user_id = req.user;
         
@@ -103,7 +103,7 @@ router.get("/:username", async(req, res) => {
     }
 });
 
-router.get("/contests/:contest_id/submissions", authorized, async(req, res) => {
+router.get("/contests/:contest_id/submissions", Authorized, async(req, res) => {
     try {
         const { contest_id } = req.params;
         const user_id = req.user;
