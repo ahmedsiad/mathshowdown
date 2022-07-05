@@ -6,6 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Contest from "./pages/Contest";
@@ -88,6 +89,7 @@ function App() {
       }
       {!loading &&
             <Routes>
+              <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/contests" element={<ContestList authorized={authenticated} />} />
