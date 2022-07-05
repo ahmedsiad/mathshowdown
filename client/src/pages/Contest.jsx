@@ -51,7 +51,7 @@ const Contest = (props) => {
                 setParticipating(true);
             }
         });
-    }, []);
+    }, [params]);
 
     const gradeContest = (event) => {
         const contest_id = params.contest_id;
@@ -111,7 +111,7 @@ const Contest = (props) => {
                                             <Typography variant="h6" sx={{ marginTop: "5px" }}>Final Standings</Typography>
                                         </Link>
                                     }
-                                    {!contest.graded && props.isAdmin &&
+                                    {Date.now() > contest.end_time && !contest.graded && props.isAdmin &&
                                         <Button variant="outlined" onClick={gradeContest}>Grade Contest</Button>
                                     }
                                 </Grid>

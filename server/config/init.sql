@@ -7,7 +7,9 @@ CREATE TABLE users (
     password_hash VARCHAR(256),
     rating int NOT NULL default 1500,
     registration_date bigint,
-    is_admin boolean NOT NULL default False
+    is_admin boolean NOT NULL default False,
+    UNIQUE(username),
+    UNIQUE(email)
 );
 
 CREATE TABLE btokens (

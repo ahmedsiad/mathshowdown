@@ -67,7 +67,7 @@ const Problem = (props) => {
                 setParticipating(false);
             }
         });
-    }, []);
+    }, [params]);
 
     useEffect(() => {
         if (!loading) {
@@ -145,6 +145,12 @@ const Problem = (props) => {
                                 <Grid item xs={12} sx={{ marginTop: "10px" }}>
                                     <Typography>{problem.problem_text}</Typography>
                                 </Grid>
+                                {problem.image_url &&
+                                    <Grid item xs={12} sx={{ marginTop: "15px", textAlign: "center" }}>
+                                        <img src={problem.image_url} alt="Problem" height="200px" width="200px" />
+                                        <Typography variant="body2">Figure 1: Problem image</Typography>
+                                    </Grid>
+                                }
                                 <Grid item xs={12} sx={{ marginTop: "30px", textAlign: "center" }}>
                                     <TextField
                                         value={inputs.answer}
