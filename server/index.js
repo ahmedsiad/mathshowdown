@@ -9,10 +9,6 @@ app.use(express.json());
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../client/build")));
-
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../client/build/index.html"));
-    })
 }
 
 // ROUTES
@@ -27,6 +23,9 @@ app.listen(PORT, () => {
     console.log(`Port has started on port ${PORT}`);
 });
 
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 // set pg type
 
