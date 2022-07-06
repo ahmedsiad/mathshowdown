@@ -12,7 +12,7 @@ import StandingsTable from "../components/StandingsTable";
 
 const ContestStandings = (props) => {
     const params = useParams();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams,] = useSearchParams();
 
     const [loading, setLoading] = useState(true);
     const [contest, setContest] = useState({});

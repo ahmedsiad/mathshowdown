@@ -19,7 +19,7 @@ import RatingText from "../components/RatingText";
 import Username from "../components/Username";
 
 const Leaderboard = (props) => {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams,] = useSearchParams();
 
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
