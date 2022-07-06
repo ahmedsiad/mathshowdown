@@ -57,7 +57,6 @@ const ContestStandings = (props) => {
             } else {
                 window.location = "/";
             }
-            console.log(res3);
         });
     }, [params, searchParams]);
 

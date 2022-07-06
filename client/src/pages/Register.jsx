@@ -67,6 +67,7 @@ const Register = (props) => {
             return results.json();
         }).then((data) => {
             if (data.success) {
+                localStorage.setItem("auth_token", data.token);
                 sessionStorage.setItem("auth_token", data.token);
                 window.location = "/";
             } else {

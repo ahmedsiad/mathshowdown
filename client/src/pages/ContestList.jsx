@@ -38,8 +38,6 @@ const ContestList = (props) => {
             return response.json();
         }).then((res) => {
             if (res.success) {
-                console.log(res);
-
                 const pContests = [];
                 const cContests = [];
                 const fContests = [];
