@@ -19,6 +19,7 @@ import Profile from "./pages/Profile";
 import UserContest from "./pages/UserContest";
 import UserContestList from "./pages/UserContestList";
 import Leaderboard from "./pages/Leaderboard";
+import NoMatch from "./pages/NoMatch";
 import RatingText from "./components/RatingText";
 
 function App() {
@@ -49,7 +50,6 @@ function App() {
       sessionStorage.setItem("auth_token", potential_token);
     }
     checkAuthentication();
-    console.log(potential_token);
   }, []);
 
   return (
@@ -103,6 +103,7 @@ function App() {
               <Route path="/profile/:username/contests" element={<UserContestList />} />
               <Route path="/profile/:username/contest/:contest_id" element={<UserContest />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="*" element={<NoMatch />} />
             </Routes>
       } 
     </div>

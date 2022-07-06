@@ -5,23 +5,16 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 
 const Login = (props) => {
     const [inputs, setInputs] = useState({ username: "", password: "" });
     const [errors, setErrors] = useState({ username: false, password: false });
     const [helpers, setHelpers] = useState({ username: "", password: "" });
-    const [remember, setRemember] = useState(false);
 
     const handleChange = (event) => {
         setInputs({ ...inputs, [event.target.name]: event.target.value });
         setErrors({ ...errors, [event.target.name]: false });
         setHelpers({ ...helpers, [event.target.name]: "" });
-    }
-
-    const handleChecked = (event) => {
-        setRemember(event.target.checked);
     }
 
     const submit = (event) => {
@@ -34,9 +27,7 @@ const Login = (props) => {
             return response.json();
         }).then((data) => {
             if (data.success) {
-                if (remember) {
-                    localStorage.setItem("auth_token", data.token);
-                }
+                localStorage.setItem("auth_token", data.token);
                 sessionStorage.setItem("auth_token", data.token);
                 window.location = "/";
             } else {
@@ -79,12 +70,6 @@ const Login = (props) => {
                                     variant="standard"
                                     error={errors.password}
                                     helperText={helpers.password}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    label="Remember Me"
-                                    control={<Checkbox checked={remember} onChange={handleChecked} />}
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{ marginTop: "10px" }}>

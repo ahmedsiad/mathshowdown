@@ -123,7 +123,7 @@ const Create = (props) => {
             return response.json();
         }).then((res) => {
             if (res.success) {
-
+                window.location = "/contests";
             } else {
                 setError(true);
             }
