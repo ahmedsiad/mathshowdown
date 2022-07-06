@@ -22,8 +22,10 @@ router.post("/register", RegisterValidator, async(req, res) => {
         const salt = await bcrypt.genSalt(saltRound);
         const bcrptPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await pool.query("INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *",
-        [username, email, bcrptPassword]);
+        const current_time = Date.now();
+
+        const newUser = await pool.query("INSERT INTO users (username, email, password_hash, registration_date) VALUES ($1, $2, $3, $4) RETURNING *",
+        [username, email, bcrptPassword, current_time]);
         
         const token = jwtGenerator(newUser.rows[0].id);
 
