@@ -35,7 +35,7 @@ const Profile = (props) => {
                 let maxRatingBefore = Math.max(...res.user.contest_history.map((p) => p.rating_before));
                 let maxRatingAfter = Math.max(...res.user.contest_history.map((p) => p.rating_after));
 
-                setMaxRating(Math.max(maxRatingBefore, maxRatingAfter));
+                setMaxRating(Math.max(maxRatingBefore, maxRatingAfter, res.user.rating));
             } else {
                 window.location = "/";
             }
