@@ -91,9 +91,9 @@ function App() {
       {!loading &&
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={(!authenticated) ? <Login /> : <Navigate to="/" replace />} />
               <Route path="/logout" element={(authenticated) ? <Logout /> : <Navigate to="/" replace />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/register" element={(!authenticated) ? <Register /> : <Navigate to="/" replace />} />
               <Route path="/contests" element={<ContestList authorized={authenticated} />} />
               <Route path="/contest/:contest_id" element={<Contest isAdmin={user.is_admin} />} />
               <Route path="/contest/:contest_id/standings" element={<ContestStandings />} />
