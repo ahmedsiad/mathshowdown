@@ -142,8 +142,8 @@ const Problem = (props) => {
                                     <Typography variant="h5"><b>Problem {problem.problem_index}</b>: {problem.title}</Typography>
                                 </Grid>
                                 <Divider sx={{ width: "100%", marginTop: "10px" }} />
-                                <Grid item xs={12} sx={{ marginTop: "10px" }}>
-                                    <Typography>{problem.problem_text}</Typography>
+                                <Grid item xs={12} sx={{ marginTop: "5px" }}>
+                                    <Typography whiteSpace="pre-line">{problem.problem_text}</Typography>
                                 </Grid>
                                 {problem.image_url &&
                                     <Grid item xs={12} sx={{ marginTop: "15px", textAlign: "center" }}>
@@ -225,6 +225,7 @@ const Problem = (props) => {
                             </Paper>
                         }
                     </Grid>
+                    <Grid item xs={12} />
                 </Grid>
             }
         </div >
