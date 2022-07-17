@@ -81,6 +81,7 @@ INSERT INTO tags (tag) VALUES ('Calculus');
 INSERT INTO tags (tag) VALUES ('Linear Algebra');
 INSERT INTO tags (tag) VALUES ('Number Theory');
 INSERT INTO tags (tag) VALUES ('Probability');
+INSERT INTO tags (tag) VALUES ('Logic');
 INSERT INTO tags (tag) VALUES ('Combinatorics');
 INSERT INTO tags (tag) VALUES ('Graph Theory');
 INSERT INTO tags (tag) VALUES ('Complex Numbers');
