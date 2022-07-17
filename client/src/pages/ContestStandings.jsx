@@ -112,6 +112,7 @@ const ContestStandings = (props) => {
                         />
                     </Grid>
                     <Grid item xs={1} />
+                    <Grid item xs={12} />
                 </Grid>
             }
         </div>
