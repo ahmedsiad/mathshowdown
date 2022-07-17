@@ -60,7 +60,7 @@ router.get("/:contest_id/problems/:problem_index", async(req, res) => {
         problem.tags = [];
 
         if (contest.graded) {
-            const tags_query = await pool.query("SELECT t.tag FROM tags t INNER JOIN problem_tags p ON t.id = p.problem_id WHERE p.problem_id = $1",
+            const tags_query = await pool.query("SELECT t.tag FROM tags t INNER JOIN problem_tags p ON t.id = p.tag_id WHERE p.problem_id = $1",
             [problem.id]);
             problem.tags = tags_query.rows;
         }
