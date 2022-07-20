@@ -48,7 +48,6 @@ const Problem = (props) => {
                 setContest(res1.contest);
                 setProblem(res2.problem);
                 setLoading(false);
-                console.log(res2);
             } else {
                 window.location = "/";
             }
@@ -147,7 +146,7 @@ const Problem = (props) => {
                                 </Grid>
                                 {problem.image_url &&
                                     <Grid item xs={12} sx={{ marginTop: "15px", textAlign: "center" }}>
-                                        <img src={problem.image_url} alt="Problem" height="200px" width="200px" />
+                                        <img src={problem.image_url} alt="Problem" style={{ maxWidth: "100%" }} />
                                         <Typography variant="body2">Figure 1: Problem image</Typography>
                                     </Grid>
                                 }
