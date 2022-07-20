@@ -19,6 +19,20 @@ const Home = (props) => {
                             <Divider sx={{ width: "100%" }} />
 
                             <Grid item xs={12}>
+                                <Typography variant="h6" sx={{ fontWeight: "bold" }}>MS Beta Round #2</Typography>
+                                <Typography variant="body2">July 19, 2022</Typography>
+                            </Grid>
+                            <Divider sx={{ width: "100%" }} />
+                            <Grid item xs={12} sx={{ marginTop: "5px" }}>
+                                <Typography>
+                                    I am happy to announce that MS Beta Round #2 (Div. 2) will be held on Saturday July 23, 2022 at 19:00 MST (01:00 UTC).
+                                    There will be <b>5</b> problems and <b>45</b> minutes to complete them. Make sure to register on the&nbsp;
+                                    <Link to={"/contests"}>contests</Link>
+                                    &nbsp;page before the contest starts. I hope you will be able to participate and gain rating!
+                                </Typography>
+                            </Grid>
+
+                            <Grid item xs={12} sx={{ marginTop: "5px" }}>
                                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>The Beginning</Typography>
                                 <Typography variant="body2">July 4, 2022</Typography>
                             </Grid>
