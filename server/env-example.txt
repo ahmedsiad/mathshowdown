@@ -4,3 +4,4 @@ PG_HOST = localhost
 PG_PORT = 5432
 PG_DATABASE = mathshowdown
 jwtSecret = "123456"
+SECRET_KEY = "ABCDEF"

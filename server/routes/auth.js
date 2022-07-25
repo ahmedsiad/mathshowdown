@@ -1,13 +1,22 @@
+const axios = require('axios').default;
 const router = require("express").Router();
 const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const { Authorized } = require("../middleware/authorization");
 const { RegisterValidator } = require("../middleware/validators");
+require("dotenv").config();
 
 router.post("/register", RegisterValidator, async(req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, gToken } = req.body;
+
+        const url = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.SECRET_KEY}&response=${gToken}`;
+        const gReq = await axios.post(url);
+
+        if (!gReq.data.success) {
+            return res.status(403).json({ success: false, message: "Failed to pass reCaptcha" });
+        }
 
         const user = await pool.query("SELECT * FROM users WHERE LOWER(username) = LOWER($1) OR LOWER(email) = LOWER($2)", [username, email]);
         if (user.rows.length > 0) {

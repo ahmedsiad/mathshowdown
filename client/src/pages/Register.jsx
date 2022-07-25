@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import ReCaptcha from "react-google-recaptcha";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -23,6 +24,8 @@ const Register = (props) => {
 
     const [errors, setErrors] = useState({ username: false, email: false, password: false, confirm: false });
     const [helpers, setHelpers] = useState({ username: "", email: "", password: "", confirm: "" });
+
+    const captchaRef = useRef(null);
 
     const handleChange = (event) => {
         setInputs({ ...inputs, [event.target.name]: event.target.value });
@@ -58,7 +61,13 @@ const Register = (props) => {
         setHelpers({ ...helpers, username: uh, email: eh, password: ph, confirm: ch });
         if (flag) return;
 
-        const data = { username: inputs.username, email: inputs.email, password: inputs.password };
+        const token = captchaRef.current.getValue();
+        captchaRef.current.reset();
+        if (!token) {
+            return;
+        }
+
+        const data = { username: inputs.username, email: inputs.email, password: inputs.password, gToken: token };
         fetch("/api/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -136,6 +145,12 @@ const Register = (props) => {
                                     variant="standard"
                                     error={errors.confirm}
                                     helperText={helpers.confirm}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sx={{ justifyContent: "center", display: "inline-flex" }}>
+                                <ReCaptcha
+                                    sitekey="6LfxSB4hAAAAAKCGiArYtKFj9wy35NMYEo0dwiWa"
+                                    ref={captchaRef}
                                 />
                             </Grid>
                             <Grid item xs={12} sx={{ marginTop: "10px" }}>
