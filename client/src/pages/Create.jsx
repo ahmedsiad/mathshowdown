@@ -54,7 +54,7 @@ const Create = (props) => {
         }).then(([res1, res2]) => {
             if (res1.success && res2.success) {
                 res1.users.sort((a, b) => {
-                    if (a.is_admin == b.is_admin) {
+                    if (a.is_admin === b.is_admin) {
                         return a.username.localeCompare(b.username);
                     }
                     else if (a.is_admin) {
