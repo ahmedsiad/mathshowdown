@@ -135,7 +135,7 @@ router.get("/", async(req, res) => {
         const page = (req.query.page) ? req.query.page : 0;
         const limit = (req.query.limit) ? req.query.limit : 100;
 
-        const users_query = await pool.query("SELECT id, username, rating, registration_date FROM users ORDER BY rating DESC OFFSET $1 FETCH NEXT $2 ROWS ONLY",
+        const users_query = await pool.query("SELECT id, username, rating, registration_date, is_admin FROM users ORDER BY rating DESC OFFSET $1 FETCH NEXT $2 ROWS ONLY",
         [page * limit, limit]);
 
         const count_query = await pool.query("SELECT COUNT(*) FROM users");

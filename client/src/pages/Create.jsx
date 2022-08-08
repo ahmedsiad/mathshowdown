@@ -53,6 +53,16 @@ const Create = (props) => {
             return Promise.all([res1.json(), res2.json()]);
         }).then(([res1, res2]) => {
             if (res1.success && res2.success) {
+                res1.users.sort((a, b) => {
+                    if (a.is_admin == b.is_admin) {
+                        return a.username.localeCompare(b.username);
+                    }
+                    else if (a.is_admin) {
+                        return -1;
+                    }
+                    return 1;
+
+                });
                 setUsers(res1.users);
 
                 res2.tags.sort((a, b) => a.tag.localeCompare(b.tag));
