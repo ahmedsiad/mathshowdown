@@ -43,6 +43,8 @@ const Create = (props) => {
     const [problems, setProblems] = useState([]);
     const [error, setError] = useState(false);
 
+    const [buttonLocked, setButtonLocked] = useState(false);
+
     useEffect(() => {
         Promise.all([
             fetch("/api/users", { method: "GET" }),
@@ -96,13 +98,18 @@ const Create = (props) => {
     }
 
     const submit = (event) => {
+        if (buttonLocked) return;
+        setButtonLocked(true);
+
         if (contestInputs.title === "" || contestInputs.authors.length === 0 || problems.length === 0) {
             setError(true);
+            setButtonLocked(false);
             return;
         }
         for (const prob of problems) {
             if (prob.title === "" || prob.description === "" || prob.answer === "") {
                 setError(true);
+                setButtonLocked(false);
                 return;
             }
         }
@@ -127,7 +134,8 @@ const Create = (props) => {
             } else {
                 setError(true);
             }
-        })
+            setButtonLocked(false);
+        });
     }
 
     return (
