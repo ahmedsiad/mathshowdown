@@ -206,6 +206,7 @@ const Create = (props) => {
                                     <Select label="Division" name="division" size="small" value={contestInputs.division} onChange={handleContestInputs}>
                                         <MenuItem value={1}>1</MenuItem>
                                         <MenuItem value={2}>2</MenuItem>
+                                        <MenuItem value={3}>3</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
