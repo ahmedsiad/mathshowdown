@@ -36,6 +36,7 @@ const Contest = (props) => {
             return Promise.all([res1.json(), res2.json(), res3.json(), res4.json()]);
         }).then(([res1, res2, res3, res4]) => {
             if (res1.success && res2.success && res3.success && Date.now() >= res1.contest.start_time) {
+                res2.problems.sort((a, b) => a.problem_index.localeCompare(b.problem_index));
                 setContest(res1.contest);
                 setContestGraded(res1.contest.graded);
                 setProblems(res2.problems);

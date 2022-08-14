@@ -36,6 +36,7 @@ const ContestStandings = (props) => {
             return Promise.all([res1.json(), res2.json(), res3.json()]);
         }).then(([res1, res2, res3]) => {
             if (res1.success && res1.contest.graded && res2.success && res3.success) {
+                res2.problems.sort((a, b) => a.problem_index.localeCompare(b.problem_index));
                 setContest(res1.contest);
                 setProblems(res2.problems);
                 setMaxPage(Math.floor(res3.count / 1000) + 1);
