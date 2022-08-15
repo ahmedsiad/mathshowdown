@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import TopRated from "../components/TopRated";
+import Username from "../components/Username";
 
 const Home = (props) => {
     return (
@@ -17,6 +18,23 @@ const Home = (props) => {
                                 <Typography variant="h4">News and Updates</Typography>
                             </Grid>
                             <Divider sx={{ width: "100%" }} />
+
+                            <Grid item xs={12}>
+                                <Typography variant="h6" sx={{ fontWeight: "bold" }}>Introducing Speed Rounds</Typography>
+                                <Typography variant="body2">Aug. 15, 2022</Typography>
+                            </Grid>
+                            <Divider sx={{ width: "100%" }} />
+                            <Grid item xs={12} sx={{ marginTop: "5px" }}>
+                                <Typography>
+                                    A new type of rounds called "Speed Rounds" has been created, thanks to&nbsp;
+                                    <Username rating={1500} display="inline-flex">floaty</Username>! These rounds are like regular Beta rounds,
+                                    but speed will be key. They will have several questions with short problem statements to accomodate the short
+                                    round duration. The very first round of these, MS Speed Round #1, will be held on Wednesday August 15, 2022
+                                    at 21:00 MST (03:00 UTC). Make sure to register on the&nbsp;
+                                    <Link to={"/contests"}>contests</Link>
+                                    &nbsp;page before the contest starts. Good luck to all!
+                                </Typography>
+                            </Grid>
 
                             <Grid item xs={12}>
                                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>MS Beta Round #2</Typography>
@@ -52,6 +70,7 @@ const Home = (props) => {
                 <Grid item xs={3}>
                     <TopRated />
                 </Grid>
+                <Grid item xs={12} />
             </Grid>
         </div>
     );
