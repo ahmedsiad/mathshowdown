@@ -93,7 +93,7 @@ const Create = (props) => {
 
     const addProblem = (event) => {
         if (problems.length >= 26) return;
-        setProblems([...problems, { title: "", description: "", image: "", answer: "", tags: [] }]);
+        setProblems([...problems, { title: "", description: "", editorial: "", image: "", answer: "", tags: [] }]);
     }
 
     const deleteProblem = (event, index) => {
@@ -284,6 +284,22 @@ const Create = (props) => {
                                             name="description"
                                             label="Description"
                                             value={problem.description}
+                                            onChange={(event) => handleProblem(event, index)}
+                                            sx={{ width: "100%" }} />
+                                    </Grid>
+
+                                    <Grid item xs={2}>
+                                        <Typography variant="h6">Editorial:</Typography>
+                                    </Grid>
+                                    <Grid item xs={10}>
+                                        <TextField
+                                            multiline
+                                            minRows={5}
+                                            maxRows={10}
+                                            size="small"
+                                            name="editorial"
+                                            label="Editorial"
+                                            value={problem.editorial}
                                             onChange={(event) => handleProblem(event, index)}
                                             sx={{ width: "100%" }} />
                                     </Grid>

@@ -33,7 +33,8 @@ CREATE TABLE problems (
     problem_text VARCHAR,
     answer VARCHAR(32),
     image_url VARCHAR(64),
-    contest_id int REFERENCES contests(id)
+    contest_id int REFERENCES contests(id),
+    editorial VARCHAR
 );
 
 CREATE TABLE tags (

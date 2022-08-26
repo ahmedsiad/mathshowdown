@@ -29,6 +29,7 @@ const Problem = (props) => {
     const [buttonLocked, setButtonLocked] = useState(false);
     const [contestOver, setContestOver] = useState(false);
     const [participating, setParticipating] = useState(true);
+    const [viewEditorial, setViewEditorial] = useState(false);
 
 
     useEffect(() => {
@@ -46,6 +47,10 @@ const Problem = (props) => {
         }).then(([res1, res2, res3]) => {
             if (res1.success && res2.success) {
                 setContest(res1.contest);
+                if (res2.problem.editorial) {
+                    const editorial = res2.problem.editorial.split("`");
+                    res2.problem.editorial = editorial;
+                }
                 setProblem(res2.problem);
                 setLoading(false);
             } else {
@@ -73,6 +78,12 @@ const Problem = (props) => {
             MathJax.Hub.Typeset();
         }
     }, [loading]);
+
+    useEffect(() => {
+        if (viewEditorial) {
+            MathJax.Hub.Typeset();
+        }
+    }, [viewEditorial]);
 
 
     const handleChange = (event) => {
@@ -224,6 +235,39 @@ const Problem = (props) => {
                             </Paper>
                         }
                     </Grid>
+                    <Grid item xs={2} />
+                    <Grid item xs={6}>
+                        {problem.editorial &&
+                            <Paper square sx={{ padding: "12px" }} elevation={3}>
+                                <Grid container spacing={1} sx={{ width: "100%", margin: 0 }}>
+                                    <Grid item xs={12} sx={{ textAlign: "center" }}>
+                                        <Typography variant="h5"><b>Editorial</b></Typography>
+                                    </Grid>
+                                    <Divider sx={{ width: "100%", marginTop: "10px" }} />
+                                    {!viewEditorial &&
+                                        <Grid item xs={12} sx={{ marginTop: "5px", textAlign: "center" }}>
+                                            <Button variant="outlined" onClick={(event) => setViewEditorial(true)}>View Editorial</Button>
+                                        </Grid>
+                                    }
+                                    {viewEditorial && problem.editorial.map((txt, index) => (
+                                        <Fragment key={index}>
+                                            {index % 2 === 0 &&
+                                                <Grid item xs={12} sx={{ marginTop: "5px" }}>
+                                                    <Typography whiteSpace="pre-line">{txt}</Typography>
+                                                </Grid>
+                                            }
+                                            {index % 2 === 1 &&
+                                                <Grid item xs={12} sx={{ marginTop: "5px", textAlign: "center" }}>
+                                                    <img src={txt} alt="Editorial Helper" style={{ maxWidth: "100%" }}></img>
+                                                </Grid>
+                                            }
+                                        </Fragment>
+                                    ))}
+                                </Grid>
+                            </Paper>
+                        }
+                    </Grid>
+                    <Grid item xs={4} />
                     <Grid item xs={12} />
                 </Grid>
             }

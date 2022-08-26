@@ -64,6 +64,9 @@ router.get("/:contest_id/problems/:problem_index", async(req, res) => {
             [problem.id]);
             problem.tags = tags_query.rows;
         }
+        else {
+            problem.editorial = null;
+        }
 
         return res.status(200).json({ success: true, problem: problem });
     } catch (err) {
@@ -199,8 +202,9 @@ router.post("/", Authorized, AdminAuthorized, ContestValidator, async(req, res) 
         for (let i = 0; i < problems.length; i++) {
             const prob = problems[i];
             const problem_index = String.fromCharCode(65 + i);
-            const problem_query = await pool.query(`INSERT INTO problems (title, problem_index, problem_text, answer, image_url, contest_id)
-                VALUES ($1, $2, $3, $4, $5, $6) RETURNING (id)`, [prob.title, problem_index, prob.description, prob.answer, prob.image, contest_id]);
+            const problem_query = await pool.query(`INSERT INTO problems (title, problem_index, problem_text, answer, image_url, contest_id, editorial)
+                VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING (id)`,
+                [prob.title, problem_index, prob.description, prob.answer, prob.image, contest_id, prob.editorial]);
             
             const problem_id = problem_query.rows[0].id;
             for (const tag_id of prob.tags) {
