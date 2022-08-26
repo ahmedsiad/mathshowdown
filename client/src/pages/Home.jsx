@@ -29,7 +29,7 @@ const Home = (props) => {
                                     A new type of rounds called "Speed Rounds" has been created, thanks to&nbsp;
                                     <Username rating={1500} display="inline-flex">floaty</Username>! These rounds are like regular Beta rounds,
                                     but speed will be key. They will have several questions with short problem statements to accomodate the short
-                                    round duration. The very first round of these, MS Speed Round #1, will be held on Wednesday August 15, 2022
+                                    round duration. The very first round of these, MS Speed Round #1, will be held on Wednesday August 17, 2022
                                     at 21:00 MST (03:00 UTC). Make sure to register on the&nbsp;
                                     <Link to={"/contests"}>contests</Link>
                                     &nbsp;page before the contest starts. Good luck to all!
