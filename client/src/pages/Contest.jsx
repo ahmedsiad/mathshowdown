@@ -22,6 +22,8 @@ const Contest = (props) => {
     const [participating, setParticipating] = useState(false);
     const [contestGraded, setContestGraded] = useState(false);
 
+    const [buttonLocked, setButtonLocked] = useState(false);
+
     useEffect(() => {
         const contest_id = params.contest_id;
         Promise.all([
@@ -55,6 +57,9 @@ const Contest = (props) => {
     }, [params]);
 
     const gradeContest = (event) => {
+        if (buttonLocked) return;
+        setButtonLocked(true);
+
         const contest_id = params.contest_id;
         fetch(`/api/contests/${contest_id}/grade`, {
             method: "POST",
@@ -65,6 +70,7 @@ const Contest = (props) => {
             if (res.success) {
                 setContest({ ...contest, graded: true });
             }
+            setButtonLocked(false);
         });
     }
 
