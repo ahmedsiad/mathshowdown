@@ -26,7 +26,7 @@ const ContestValidator = async(req, res, next) => {
         if (title.length === 0 || title.length > 64) {
             return res.status(400).json({ success: false, message: "Invalid Contest Title" });
         }
-        if (typeof division !== "number" || division !== 1 && division !== 2) {
+        if (typeof division !== "number" || (division !== 1 && division !== 2 && division !== 3)) {
             return res.status(400).json({ success: false, message: "Invalid Division" });
         }
         if (startTime < Date.now()) {
