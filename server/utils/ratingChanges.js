@@ -43,6 +43,7 @@ const calculateRatingChanges = async(contest) => {
 
     let curr_rank = 1;
     let last = 0;
+    let freqs = new Array(participants.length + 1).fill(0);
     for (let i = 0; i < participants.length; i++) {
         if (i > 0 && (participants[i].solved !== participants[i - 1].solved || participants[i].penalty !== participants[i - 1].penalty)) {
             curr_rank += i - last;
@@ -50,7 +51,15 @@ const calculateRatingChanges = async(contest) => {
         }
         
         participants[i].rank = curr_rank;
+        freqs[curr_rank] += 1;
         const rank_query = await pool.query("UPDATE participants SET rank = $1 WHERE id = $2", [curr_rank, participants[i].id]);
+    }
+
+    // rank adjustment for ties
+    for (let i = 0; i < participants.length; i++) {
+        let amt = freqs[participants[i].rank];
+        let avg = participants[i].rank + (amt - 1) / 2;
+        participants[i].rank = avg;
     }
 
     // calculate rating changes
