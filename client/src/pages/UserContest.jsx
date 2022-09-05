@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -55,6 +56,10 @@ const UserContest = (props) => {
             }
             {!loading &&
                 <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
+                    <Helmet>
+                        <title>{user.username} Submissions - Math Showdown</title>
+                        <meta property="og:title" content={user.username + " Submissions - Math Showdown"} />
+                    </Helmet>
                     <Grid item xs={2} />
                     <Grid item xs={6}>
                         <Paper square sx={{ padding: "12px" }} elevation={3}>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -40,6 +41,10 @@ const Login = (props) => {
 
     return (
         <div>
+            <Helmet>
+                <title>Login - Math Showdown</title>
+                <meta property="og:title" content="Login - Math Showdown" />
+            </Helmet>
             <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
                 <Grid item xs={4} />
                 <Grid item xs={4}>

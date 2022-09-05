@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import format from "date-fns/format";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
@@ -62,6 +63,10 @@ const Leaderboard = (props) => {
 
     return (
         <div>
+            <Helmet>
+                <title>Leaderboard - Math Showdown</title>
+                <meta property="og:title" content="Leaderboard - Math Showdown" />
+            </Helmet>
             {loading &&
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
                     <CircularProgress />

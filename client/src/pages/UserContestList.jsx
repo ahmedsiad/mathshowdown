@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import format from "date-fns/format";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
@@ -51,6 +52,10 @@ const UserContestList = (props) => {
             }
             {!loading &&
                 <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
+                    <Helmet>
+                        <title>{user.username} Contest History - Math Showdown</title>
+                        <meta property="og:title" content={user.username + " Contest History - Math Showdown"} />
+                    </Helmet>
                     <Grid item xs={1} />
                     <Grid item xs={7}>
                         <Paper square sx={{ padding: "12px" }} elevation={3}>

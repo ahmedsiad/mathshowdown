@@ -2,6 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { Helmet } from "react-helmet";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -150,6 +151,9 @@ const Create = (props) => {
 
     return (
         <div>
+            <Helmet>
+                <title>Contest Creator - Math Showdown</title>
+            </Helmet>
             <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
                 <Grid item xs={2} />
                 <Grid item xs={7}>

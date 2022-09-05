@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -9,6 +10,10 @@ import Username from "../components/Username";
 const Home = (props) => {
     return (
         <div>
+            <Helmet>
+                <title>Math Showdown</title>
+                <meta property="og:title" content="Math Showdown" />
+            </Helmet>
             <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
                 <Grid item xs={2} />
                 <Grid item xs={6}>

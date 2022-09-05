@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import format from "date-fns/format";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -109,7 +110,7 @@ const ContestList = (props) => {
             }
             setRegisterOpen(false);
             setSelectedContest(null);
-        })
+        });
     }
 
     return (
@@ -121,6 +122,10 @@ const ContestList = (props) => {
             }
             {!loading &&
                 <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
+                    <Helmet>
+                        <title>Contests - Math Showdown</title>
+                        <meta property="og:title" content="Contests - Math Showdown" />
+                    </Helmet>
                     <Grid item xs={2} />
                     <Grid item xs={8}>
                         {currentContests.length > 0 &&

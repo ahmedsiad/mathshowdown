@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -74,6 +75,10 @@ const ContestStandings = (props) => {
             }
             {!loading &&
                 <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
+                    <Helmet>
+                        <title>Standings - {contest.title} (Div. {contest.division.toString()})</title>
+                        <meta property="og:title" content={"Standings - " + contest.title} />
+                    </Helmet>
                     <Grid item xs={1} />
                     <Grid item xs={10}>
                         <Paper square sx={{ padding: "12px" }} elevation={3}>

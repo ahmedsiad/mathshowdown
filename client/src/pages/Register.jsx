@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Helmet } from "react-helmet";
 import ReCaptcha from "react-google-recaptcha";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -92,6 +93,10 @@ const Register = (props) => {
     }
     return (
         <div>
+            <Helmet>
+                <title>Register - Math Showdown</title>
+                <meta property="og:title" content="Register - Math Showdown" />
+            </Helmet>
             <Grid container spacing={2} sx={{ width: "100%", margin: 0 }}>
                 <Grid item xs={4} />
                 <Grid item xs={4}>
